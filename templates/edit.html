@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Edit</title>
+</head>
+<body>
+    <h1>Edit your letter</h1>
+    {% for paragraph in paragraphed_letter %}
+        <form method="POST" action="{{ url_for('finalise') }}">
+            <p>{{ paragraph }}</p>
+            <br>
+            <input type="checkbox" name="looks_good" value="true"> Looks good
+            <input type="checkbox" name="rewrite" value="true"> Rewrite
+            <br><br>
+            <input type="submit" value="Submit">
+        </form>
+    {% endfor %}
+
+        
+</body>
+</html>

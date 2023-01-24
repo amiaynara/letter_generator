@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Letter</title>
+</head>
+<body>
+    <h1>Your letter</h1>
+    <p>{{ letter }}</p>
+    <form method="POST" action="{{ url_for('download') }}">
+        <input type="submit" value="Download">
+    </form>
+</body>
+</html>
