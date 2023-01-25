@@ -31,7 +31,7 @@ openai.api_key = config.get("OPENAI_API_KEY")
 def generate_letter(subject, number_of_paragraphs=3):
     '''Method to return the first draft of letters'''
     search_query = f'I want to write a letter about "{subject}". If I want the letter to be {number_of_paragraphs} paragraphs long, \
-        please write the letter.'
+        please write the letter now.'
     completions = openai.Completion.create(
         engine="text-davinci-003",
         prompt=search_query,
