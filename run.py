@@ -1,4 +1,5 @@
 import json
+import re
 from flask import Flask, render_template, request, redirect, url_for, session
 import openai
 
@@ -46,6 +47,19 @@ def generate_letter(subject, word_count=200):
     print(letter)
     return letter
 
+def modify_para(paragraph, instruction):
+    search_query = f'Keeping this instruction in mind: {instruction}; modify the paragraph:\n{paragraph}'
+    completions = openai.Completion.create(
+        engine="text-davinci-003",
+        prompt=search_query,
+        max_tokens=1024,
+        n=1,
+        stop=None,
+        temperature=0.5,
+    )
+    new_paragraph = completions.choices[0].text
+    return new_paragraph.replace('"', '').replace('\n', '')
+
 def paragraph_letter(letter):
     '''Break a letter into paragraphs'''
     letter = letter.strip('\n')
@@ -64,7 +78,7 @@ def parameters():
         paras = f'\n\nDear [name],\n\n{para1}\n\n{para2}\n\n{para3}'
         letter_type = request.form['instruction']
         word_count = request.form['word_count']
-        letter_generated = paras or generate_letter(letter_type, word_count)
+        letter_generated = generate_letter(letter_type, word_count)
         paragraphed_letter = paragraph_letter(letter_generated)
         return render_template('edit.html', paragraphed_letter=paragraphed_letter)
     return render_template('parameters.html')
@@ -72,14 +86,35 @@ def parameters():
 @app.route('/edit', methods=['GET', 'POST'])
 def edit():
     if request.method == 'POST':
-        paragraphs = request.form.getlist('paragraph')
-        return render_template('finalise.html', paragraphs=paragraphs)
+        data = request.form
+        return render_template('finalise.html', letter=final_letter)
 
-@app.route('/edit_para', methods=['GET', 'POST'])
+@app.route('/edit_para', methods=['POST'])
 def edit_para():
-    paragraphs = request.form
-    print('the form is ', paragraphs)
-    return render_template('edit.html', paragraphed_letter=session.get('paragraphs'))
+
+    data = request.form
+    keys = data.keys()
+    # find the paragraph index that is to be changed
+    paragraph_index = None
+    regx = r'instruction_(?P<digit>\d+)'
+    paragraphs = {}
+    for key in keys:
+        if 'instruction' in key and data.get(key):
+            match = re.search(regx, key)
+            if match:
+                paragraph_index = match.group('digit')
+        if 'para' in key:
+            paragraphs[key] = data.get(key)
+    if paragraph_index:
+        modified_para = modify_para(data.get(f'para_{paragraph_index}'), data.get(f'instruction_{paragraph_index}'))
+        print('modified_para is', modified_para)
+        paragraphs[f'para_{paragraph_index}'] = modified_para
+    else:
+        final_letter = '\n\n'.join(paragraphs.values())
+        print(final_letter)
+        return render_template('finalise.html', letter=final_letter)
+
+    return render_template('edit.html', paragraphed_letter=paragraphs.values())
 
 @app.route('/finalise', methods=['GET', 'POST'])
 def finalise():

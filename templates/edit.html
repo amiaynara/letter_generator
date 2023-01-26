@@ -15,6 +15,7 @@
           opacity: 0.8;
           width: 180px;
           border-radius: 25px;
+          margin: 7px;
         }
         
         /* The popup form - hidden by default */
@@ -27,13 +28,15 @@
           max-width: 300px;
           padding: 10px;
           background-color: white;
+          border: 1px solid gray;
           border-radius: 25px;
           display: none;
+          margin: 5px;
         }
         
         /* Full-width input fields */
         .form-container input[type=text], .form-container input[type=password] {
-          width: 100%;
+          width: 90%;
           padding: 15px;
           margin: 5px 0 22px 0;
           border: none;
@@ -67,7 +70,11 @@
         /* Add some hover effects to buttons */
         .form-container .btn:hover, .open-button:hover {
           opacity: 1;
-          
+        }
+        
+        .submit-btn {
+          background-color: rgb(31, 172, 31);
+          width: 130px;
         }
     </style>
 </head>
@@ -76,27 +83,29 @@
     <form method="POST" action={{ url_for('edit_para')}}>
         {% for paragraph in paragraphed_letter %}
                 <textarea cols="80" name="para_{{ loop.index }}">{{ paragraph }}</textarea>
-                <button class="open-button" onclick="openForm({{ loop.index }})">Re-write Paragraph</button>
-
+                <br>
+                <button type="button" class="open-button" id="open-button-{{loop.index}}" onclick="openForm({{ loop.index }})">Re-write Paragraph</button>
                 <div class="form-container" id="myForm-{{ loop.index }}">
                     <h5>Describe how to re-write.</h5>
-                    <input type="text" placeholder="eg. Use stronger tone" name="instruction" required>        
-                    <button id="para-submit-button-{{loop.index}}" class="btn">Re-write Now</button>
+                    <input type="text" placeholder="eg. Use stronger tone" name="instruction_{{ loop.index }}">        
+                    <button type="submit" id="para-submit-button-{{loop.index}}" class="btn">Re-write Now</button>
                     <button type="button" class="btn cancel" onclick="closeForm({{ loop.index }})">Back</button>
                 </div>
             <br><br>
         {% endfor %}
-        <button type="submit" class="submit-btn">Submit</button>
+        <button type="submit" class="open-button submit-btn">Submit</button>
     </form>
 
     <script>
         function openForm(id) {
-          console.log('some')
+          console.log('some');
           document.getElementById(`myForm-${id}`).style.display = "block";
+          document.getElementById(`open-button-${id}`).style.display = "none";
         }
         
         function closeForm(id) {
           document.getElementById(`myForm-${id}`).style.display = "none";
+          document.getElementById(`open-button-${id}`).style.display = "block";
         }
     </script>
         
