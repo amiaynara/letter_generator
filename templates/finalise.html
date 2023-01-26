@@ -5,9 +5,7 @@
 </head>
 <body>
     <h1>Finalise your letter</h1>
-    {% for paragraph in paragraphs %}
-        <p>{{ paragraph }}</p>
-    {% endfor %}
+        {{letter}}
     <form method="POST" action="{{ url_for('letter') }}">
         <input type="hidden" name="letter" value="{{ paragraphs }}">
         <input type="checkbox" name="looks_good" value="true"> Looks good
