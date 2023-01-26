@@ -4,13 +4,13 @@
     <title>Parameters</title>
 </head>
 <body>
-    <h1>Enter parameters for your letter</h1>
     <form method="POST" action="{{ url_for('parameters') }}">
-        <label for="Type">Type:</label>
-        <input type="text" id="Type" name="Type">
+        <h1>Enter parameters for your letter</h1>
+        <label for="instruction">Instruction for the letter:</label>
+        <input type="text" id="instruction" name="instruction">
         <br>
-        <label for="number of paragraphs">Number of paragraphs:</label>
-        <input type="number" id="number of paragraphs" name="number of paragraphs">
+        <label for="word_count">Word Count:</label>
+        <input type="number" id="word_count" name="word_count">
         <br><br>
         <input type="submit" value="Submit">
     </form>
