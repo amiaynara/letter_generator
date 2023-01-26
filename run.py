@@ -24,7 +24,7 @@ para3 = '''I understand that financial difficulties can arise, but I
  you. Please let me know your plan of action and
  when I can expect to receive the money.\n\nYour sincerely,\n[Name]'''
 
-with open(r'/home/coolexpert/keys/ten_project_config.json') as config_file:
+with open(r'/home/coolexpert/keys/ten_question_config.json') as config_file:
     config = json.load(config_file)
 
 openai.api_key = config.get("OPENAI_API_KEY")
