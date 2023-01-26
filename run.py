@@ -24,7 +24,7 @@ para3 = '''I understand that financial difficulties can arise, but I
  you. Please let me know your plan of action and
  when I can expect to receive the money.\n\nYour sincerely,\n[Name]'''
 
-with open(r'/Users/amiaynarayan/Projects/credential.json') as config_file:
+with open(r'/home/coolexpert/keys/ten_project_config.json') as config_file:
     config = json.load(config_file)
 
 openai.api_key = config.get("OPENAI_API_KEY")
@@ -64,7 +64,7 @@ def parameters():
         paras = f'\n\nDear [name],\n\n{para1}\n\n{para2}\n\n{para3}'
         letter_type = request.form['instruction']
         word_count = request.form['word_count']
-        letter_generated = paras or generate_letter(letter_type, word_count)
+        letter_generated = generate_letter(letter_type, word_count)
         paragraphed_letter = paragraph_letter(letter_generated)
         return render_template('edit.html', paragraphed_letter=paragraphed_letter)
     return render_template('parameters.html')
