@@ -82,7 +82,7 @@
                     <h5>Describe how to re-write.</h5>
                     <input type="text" placeholder="eg. Use stronger tone" name="instruction" required>        
                     <button id="para-submit-button-{{loop.index}}" class="btn">Re-write Now</button>
-                    <button type="button" class="btn cancel">Back</button>
+                    <button type="button" class="btn cancel" onclick="closeForm({{ loop.index }})">Back</button>
                 </div>
             <br><br>
         {% endfor %}
