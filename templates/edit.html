@@ -39,8 +39,8 @@
           width: 90%;
           padding: 15px;
           margin: 5px 0 22px 0;
-          border: none;
-          background: #f1f1f1;
+          border: 1px solid rgb(133, 133, 133);
+          background: #ffffff;
         }
         
         /* When the inputs get focus, do something */
@@ -49,11 +49,11 @@
           outline: none;
         }
         
-        /* Set a style for the re-write now button */
+        /* Set a style for the Update Now button */
         .form-container .btn {
-          background-color: #04AA6D;
+          background-color: rgb(230, 0, 255);
           color: white;
-          padding: 16px 20px;
+          padding: 16px 10px;
           border: none;
           cursor: pointer;
           width: 100%;
@@ -79,16 +79,16 @@
     </style>
 </head>
 <body>
-    <h1>Edit your letter</h1>
+    <h2>Revisions</h2>
     <form method="POST" action={{ url_for('edit_para')}}>
         {% for paragraph in paragraphed_letter %}
-                <textarea cols="80" name="para_{{ loop.index }}">{{ paragraph }}</textarea>
+                <textarea cols="120" rows="5" name="para_{{ loop.index }}">{{ paragraph }}</textarea>
                 <br>
-                <button type="button" class="open-button" id="open-button-{{loop.index}}" onclick="openForm({{ loop.index }})">Re-write Paragraph</button>
+                <button type="button" class="open-button" id="open-button-{{loop.index}}" onclick="openForm({{ loop.index }})">Revise ↑</button>
                 <div class="form-container" id="myForm-{{ loop.index }}">
-                    <h5>Describe how to re-write.</h5>
-                    <input type="text" placeholder="eg. Use stronger tone" name="instruction_{{ loop.index }}">        
-                    <button type="submit" id="para-submit-button-{{loop.index}}" class="btn">Re-write Now</button>
+                    <h5>Describe how to revise ↑</h5>
+                    <input type="text" placeholder="eg. Write 50% longer in a friendlier tone" name="instruction_{{ loop.index }}">        
+                    <button type="submit" id="para-submit-button-{{loop.index}}" class="btn">Update</button>
                     <button type="button" class="btn cancel" onclick="closeForm({{ loop.index }})">Back</button>
                 </div>
             <br><br>
@@ -108,6 +108,8 @@
           document.getElementById(`open-button-${id}`).style.display = "block";
         }
     </script>
-        
+  
+    
+    
 </body>
 </html>
