@@ -7,7 +7,7 @@
     <h1>Edit your letter</h1>
     <form method="POST" action={{ url_for('edit_para')}}>
         {% for paragraph in paragraphed_letter %}
-                <textarea cols="80" name="para_{{ loop.index }}">{{ paragraph }}</textarea>
+                <textarea rows="5" cols="80" name="para_{{ loop.index }}">{{ paragraph }}</textarea>
                 <br>
                 <button type="button" class="open-button" id="open-button-{{loop.index}}" onclick="openForm({{ loop.index }})">Re-write Paragraph</button>
                 <div class="form-container" id="myForm-{{ loop.index }}">
