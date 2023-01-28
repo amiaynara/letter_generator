@@ -37,7 +37,7 @@ def generate_letter(subject, word_count=200):
     '''Method to return the first draft of letters'''
     search_query = f'I want to write a letter about "{subject}". I want the letter to be {word_count} words long.  Please use around 75 words per paragraph. \
         please write the letter.'
-    completions = openai.Completion.create(
+    response = openai.Completion.create(
         engine="text-davinci-003",
         prompt=search_query,
         max_tokens=1024,
@@ -45,12 +45,12 @@ def generate_letter(subject, word_count=200):
         stop=None,
         temperature=0.5,
     )
-    letter = completions.choices[0].text
+    letter = response.choices[0].text
     return letter
 
 def modify_para(paragraph, instruction):
     search_query = f'Keeping this instruction in mind: {instruction}; modify the paragraph:\n{paragraph}'
-    completions = openai.Completion.create(
+    response = openai.Completion.create(
         engine="text-davinci-003",
         prompt=search_query,
         max_tokens=1024,
@@ -58,8 +58,24 @@ def modify_para(paragraph, instruction):
         stop=None,
         temperature=0.5,
     )
-    new_paragraph = completions.choices[0].text
+    print(response)
+    new_paragraph = response.choices[0].text
     return new_paragraph.replace('"', '').replace('\n', '')
+
+def modify_letter(letter, instruction):
+    search_query = f'Given is a letter. Keeping this instruction in mind: {instruction}; modify the letter:\n{letter}. Also structure the letter into paragraphs.'
+    response = openai.Completion.create(
+        engine="text-davinci-003",
+        prompt=search_query,
+        max_tokens=2048,
+        n=1,
+        stop=None,
+        temperature=0.5,
+    )
+    print(response)
+    modified_letter = response.choices[0].text
+    print(modified_letter)
+    return modified_letter.replace('"', '')
 
 def paragraph_letter(letter):
     '''Break a letter into paragraphs'''
@@ -76,6 +92,7 @@ def parameters():
         letter_type = request.form['instruction']
         word_count = request.form['word_count']
         letter_generated = generate_letter(letter_type, word_count)
+        # process the response of chatgpt to convert it into paragraphs
         paragraphed_letter = paragraph_letter(letter_generated)
         return render_template('edit.html', paragraphed_letter=paragraphed_letter)
     return render_template('parameters.html')
@@ -108,8 +125,11 @@ def edit_para():
 @app.route('/finalise', methods=['GET', 'POST'])
 def finalise():
     if request.method == 'POST':
-        letter = request.form['letter']
-        return render_template('letter.html', letter=letter)
+        data = request.form
+        letter = data.get('letter').replace('\n', '')
+        instruction = data.get('instruction')
+        modified_letter = modify_letter(letter, instruction)
+        return render_template('finalise.html', letter=modified_letter)
     return render_template('finalise.html')
 
 
