@@ -76,6 +76,29 @@
       background-color: rgb(31, 172, 31);
       width: 130px;
     }
+
+    /* styles for progress bar */
+    #progress-container {
+      display: none;
+    }
+    .progress-bar {
+      width: 50%; /* adjust as needed */
+      height: 30px; /* adjust as needed */
+      background-color: #ddd;
+      border-radius: 5px;
+    }
+  
+    .progress {
+      width: 0%; /* initially set to 0% */
+      height: 100%;
+      background-color: #4CAF50; /* adjust as needed */
+      border-radius: 5px;
+      animation: loading 7s linear infinite;
+    }
+    @keyframes loading {
+      from { width: 0%; }
+      to { width: 100%; }
+    }
   </style>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.5.3/jspdf.min.js"></script>
 </head>
@@ -83,7 +106,7 @@
   {% block content %}
   {% endblock %}
 
-  <script>
+  <!-- <script>
     function resizeTextArea(textArea) {
       textArea.style.height = "";
       textArea.style.height = Math.min(textArea.scrollHeight, 200) + "px";
@@ -93,6 +116,6 @@
     textArea.addEventListener("input", function() {
       resizeTextArea(textArea);
     });
-  </script>
+  </script> -->
 </body>
 </html>
