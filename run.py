@@ -112,9 +112,6 @@ def finalise():
         return render_template('letter.html', letter=letter)
     return render_template('finalise.html')
 
-@app.route('/letter')
-def letter():
-    return render_template('letter.html')
 
 if __name__ == '__main__':
     app.run(debug=True)

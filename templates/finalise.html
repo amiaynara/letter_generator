@@ -5,24 +5,42 @@
 {% endblock %}
 {% block content %}
     <h1>Finalise your letter</h1>
-    <textarea id="myTextArea" type="hidden" name="letter" rows="25" cols="120">{{letter}}</textarea>   
+    <textarea id="finalLetter" type="hidden" name="letter" rows="25" cols="120">{{letter}}</textarea>   
     <br><br>
     <button class="open-button submit-btn" type="button" onclick="downloadPDF()">Export to PDF</button>
 
     <script>
         function downloadPDF() {
-            var pdf = new jsPDF();
-            var elementHTML = document.getElementById("myTextArea").innerHTML;
-            var specialElementHandlers = {
-                '#elementHTML': function (element, renderer) {
-                    return true;
+            var pdf = new jsPDF("p", "mm", "a4");
+            var text = document.getElementById("finalLetter").innerHTML;
+            var paragraphs = text.split("\n\n");
+
+            pdf.setFont("helvetica");
+            pdf.setFontSize(12);
+
+            var x = 20;
+            var y = 20;
+            var lineHeight = 10;
+            var pageWidth = pdf.internal.pageSize.getWidth();
+
+            for (var i = 0; i < paragraphs.length; i++) {
+                var words = paragraphs[i].split(" ");
+                var line = "";
+                for (var j = 0; j < words.length; j++) {
+                    var testLine = line + words[j] + " ";
+                    var testWidth = pdf.getStringUnitWidth(testLine) * pdf.internal.getFontSize() / pdf.internal.scaleFactor;
+                    if (testWidth > pageWidth - x * 2 && j > 0) {
+                        pdf.text(x, y, line);
+                        line = words[j] + " ";
+                        y += lineHeight;
+                    } else {
+                        line = testLine;
+                    }
                 }
-            };
-            pdf.fromHTML(elementHTML, 15, 15, {
-                'width': 170,
-                'elementHandlers': specialElementHandlers
-            });
-            pdf.save("letter.pdf");
+                pdf.text(x, y, line);
+                y += lineHeight;
+            }
+            pdf.save("final_letter.pdf");
         }
     </script>
 {% endblock %}
