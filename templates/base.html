@@ -4,7 +4,9 @@
   <title>{% block title %}Letter Generator{% endblock %}</title>
   <style>
     body {font-family: Arial, Helvetica, sans-serif;}
-    
+    .card { 
+      margin-top: 2rem;
+    }
     /* Button used to open the contact form - fixed at the bottom of the page */
     .open-button {
       background-color: rgb(17, 9, 238);
@@ -50,11 +52,9 @@
     }
     
     /* Set a style for the re-write now button */
-    .form-container .btn {
-      background-color: #04AA6D;
-      color: white;
+    .form-container {
       padding: 16px 20px;
-      border: none;
+      border: 1px solid gray;
       cursor: pointer;
       width: 100%;
       margin-bottom:10px;
@@ -102,8 +102,10 @@
 
     /*css for rewritten */
     [id^='tag'] {
-      position: relative;
-      bottom: 100px;
+      position: absolute;
+      top: -0.5rem;
+      left: -0.5rem;
+      font-size: 8px;
       visibility: hidden;
       border: 1px solid green;
       border-radius: 6px;
@@ -116,8 +118,16 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.5.3/jspdf.min.js"></script>
 </head>
 <body>
-  {% block content %}
-  {% endblock %}
+  <div class="container">
+    <div class="row">
+      <div class="col">
+      </div>
+        {% block content %}
+        {% endblock %}
+      <div class="col">
+      </div>
+    </div>
+  </div>
 
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js" integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN" crossorigin="anonymous"></script>
