@@ -45,9 +45,7 @@ def generate_letter(subject, word_count=200):
         stop=None,
         temperature=0.5,
     )
-    print(completions)
     letter = completions.choices[0].text
-    print(letter)
     return letter
 
 def modify_para(paragraph, instruction):
@@ -67,12 +65,8 @@ def paragraph_letter(letter):
     '''Break a letter into paragraphs'''
     letter = letter.strip('\n')
     letter_array = letter.split('\n\n')
-    paragraphed_letter = letter_array[1:len(letter_array)-1]
+    paragraphed_letter = letter_array
     return paragraphed_letter
-
-@app.route('/button', methods=['GET'])
-def button():
-    return render_template('button.html')
 
 @app.route('/', methods=['GET', 'POST'])
 def parameters():
@@ -86,15 +80,9 @@ def parameters():
         return render_template('edit.html', paragraphed_letter=paragraphed_letter)
     return render_template('parameters.html')
 
-@app.route('/edit', methods=['GET', 'POST'])
-def edit():
-    if request.method == 'POST':
-        data = request.form
-        return render_template('finalise.html', letter=final_letter)
 
 @app.route('/edit_para', methods=['POST'])
 def edit_para():
-
     data = request.form
     keys = data.keys()
     # find the paragraph index that is to be changed
@@ -110,13 +98,11 @@ def edit_para():
             paragraphs[key] = data.get(key)
     if paragraph_index:
         modified_para = modify_para(data.get(f'para_{paragraph_index}'), data.get(f'instruction_{paragraph_index}'))
-        print('modified_para is', modified_para)
         paragraphs[f'para_{paragraph_index}'] = modified_para
     else:
         final_letter = '\n\n'.join(paragraphs.values())
         print(final_letter)
         return render_template('finalise.html', letter=final_letter)
-
     return render_template('edit.html', paragraphed_letter=paragraphs.values())
 
 @app.route('/finalise', methods=['GET', 'POST'])
