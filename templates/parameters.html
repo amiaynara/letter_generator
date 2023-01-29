@@ -6,12 +6,19 @@
 {% block content %}
     <div class="col-6">
         <div class="card">
-            <h5 class="card-header text-center">Enter parameters for your letter</h5>
+            <h5 class="card-header text-center">What did you want to write about?</h5>
+            <u>Examples</u><br>
+            <br>Tell Joe that he owes me $100
+            <br>Write a love letter to Sally
+            <br>Invite the president for dinner<br><br>
+
+
+    
             <div class="card-body">
                 <form method="POST" action="{{ url_for('parameters') }}">
                     <div class="form-floating">
                         <textarea class="form-control" id="instruction" name="instruction"></textarea>
-                        <label for="instruction">Instruction for the letter</label>
+                        <label for="instruction">Write about anything... </label>
                     </div>
                     <button id="submit-button" class="btn btn-success open-button submit-btn" type="submit">Submit</button>
                 </form>
