@@ -9,13 +9,9 @@
             <h5 class="card-header text-center">Enter parameters for your letter</h5>
             <div class="card-body">
                 <form method="POST" action="{{ url_for('parameters') }}">
-                    <div class="mb-3">
-                        <label for="instruction" class="form-label">Instruction for the letter:</label>
-                        <input type="text" class="form-control" id="instruction" name="instruction">
-                    </div>
-                    <div class="mb-3">
-                        <label for="word_count" class="form-label">Word Count:</label>
-                        <input type="number" id="word_count" name="word_count" class="form-control">
+                    <div class="form-floating">
+                        <textarea class="form-control" id="instruction" name="instruction"></textarea>
+                        <label for="instruction">Instruction for the letter</label>
                     </div>
                     <button id="submit-button" class="btn btn-success open-button submit-btn" type="submit">Submit</button>
                 </form>
