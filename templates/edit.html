@@ -39,7 +39,6 @@
     $(document).ready(function() {
         {% for paragraph in paragraphed_letter %}
             var textarea = $("#para_{{ loop.index }}");
-            console.log(textarea);
             textarea.on("input", function() {
             this.style.height = "";
             this.style.height = this.scrollHeight + "px";
