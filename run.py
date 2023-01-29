@@ -60,7 +60,6 @@ def modify_para(paragraph, instruction):
         stop=None,
         temperature=0.5,
     )
-    print(response)
     new_paragraph = response.choices[0].text
     return new_paragraph.replace('"', '').replace('\n', '')
 
@@ -74,7 +73,6 @@ def modify_letter(letter, instruction):
         stop=None,
         temperature=0.5,
     )
-    print(response)
     modified_letter = response.choices[0].text
     print(modified_letter)
     return modified_letter.replace('"', '')
@@ -104,7 +102,6 @@ def parameters():
 
 @app.route('/edit_para', methods=['GET', 'POST'])
 def edit_para():
-    print(session.get('paragraphed_letter'), type(session))
     if request.method == 'POST':
         data = request.form
         keys = data.keys()
