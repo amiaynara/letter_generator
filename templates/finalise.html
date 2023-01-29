@@ -33,7 +33,6 @@
         function downloadPDF() {
             var pdf = new jsPDF("p", "mm", "a4");
             var text = document.getElementById("finalLetter").value;
-            console.log(text, 'will be printed');
             var paragraphs = text.split("\n\n");
 
             pdf.setFont("helvetica");
