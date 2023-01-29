@@ -1,6 +1,6 @@
 import json
 import re
-from flask import Flask, render_template, request, redirect, url_for, session
+from flask import Flask, render_template, request, session
 import openai
 
 app = Flask(__name__)
@@ -31,9 +31,11 @@ python_anywhere = r'/home/coolexpert/keys/ten_question_config.json'
 with open(python_anywhere) as config_file:
     config = json.load(config_file)
 
+# constants
+DEFAULT_WORD_COUNT  = 150
 openai.api_key = config.get("OPENAI_API_KEY")
 
-def generate_letter(subject, word_count=200):
+def generate_letter(subject, word_count=DEFAULT_WORD_COUNT):
     '''Method to return the first draft of letters'''
     search_query = f'I want to write a letter about "{subject}". I want the letter to be {word_count} words long.  Please use around 75 words per paragraph. \
         please write the letter.'
@@ -90,37 +92,54 @@ def parameters():
         # Remove the below line
         paras = f'\n\nDear [name],\n\n{para1}\n\n{para2}\n\n{para3}'
         letter_type = request.form['instruction']
-        word_count = request.form['word_count']
-        letter_generated = generate_letter(letter_type, word_count)
+        # word_count = request.form['word_count']
+        letter_generated = generate_letter(letter_type)
         # process the response of chatgpt to convert it into paragraphs
         paragraphed_letter = paragraph_letter(letter_generated)
-        return render_template('edit.html', paragraphed_letter=paragraphed_letter)
+        if len(paragraphed_letter) >= 2:
+            session['paragraphed_letter'] = paragraphed_letter
+        return render_template('info.html', paragraphed_letter=paragraphed_letter)
     return render_template('parameters.html')
 
 
-@app.route('/edit_para', methods=['POST'])
+@app.route('/edit_para', methods=['GET', 'POST'])
 def edit_para():
-    data = request.form
-    keys = data.keys()
-    # find the paragraph index that is to be changed
-    paragraph_index = None
-    regx = r'instruction_(?P<digit>\d+)'
-    paragraphs = {}
-    for key in keys:
-        if 'instruction' in key and data.get(key):
-            match = re.search(regx, key)
-            if match:
-                paragraph_index = match.group('digit')
-        if 'para' in key:
-            paragraphs[key] = data.get(key)
-    if paragraph_index:
-        modified_para = modify_para(data.get(f'para_{paragraph_index}'), data.get(f'instruction_{paragraph_index}'))
-        paragraphs[f'para_{paragraph_index}'] = modified_para
-    else:
-        final_letter = '\n\n'.join(paragraphs.values())
-        print(final_letter)
-        return render_template('finalise.html', letter=final_letter)
-    return render_template('edit.html', paragraphed_letter=paragraphs.values())
+    print(session.get('paragraphed_letter'), type(session))
+    if request.method == 'POST':
+        data = request.form
+        keys = data.keys()
+        # find the paragraph index that is to be changed
+        paragraph_index = None
+        regx = r'instruction_(?P<digit>\d+)'
+        paragraphs = {}
+        for key in keys:
+            if 'instruction' in key and data.get(key):
+                match = re.search(regx, key)
+                if match:
+                    paragraph_index = match.group('digit')
+            if 'para' in key:
+                paragraphs[key] = data.get(key)
+        instruction = data.get(f'instruction_{paragraph_index}')
+        if paragraph_index and instruction:
+            # if there is actually a valid change requested
+            modified_para = modify_para(data.get(f'para_{paragraph_index}'), instruction)
+            paragraphs[f'para_{paragraph_index}'] = modified_para
+            session['paragraphed_letter'] = paragraphs.values()
+        else:
+            # the request is missing the para_<id> then return the same letter.
+            final_letter = '\n\n'.join(paragraphs.values())
+            session['paragraphed_letter'] = paragraphs
+            return render_template('finalise.html', letter=final_letter)
+        return render_template('edit.html', paragraphed_letter=paragraphs.values())
+    paragraphed_letter = session.get('paragraphed_letter')
+    if paragraphed_letter:
+        return render_template('edit.html', paragraphed_letter=paragraphed_letter)
+    return render_template('400_bad_request.html')
+
+@app.route('/info', methods=['GET'])
+def info():
+    paragraphed_letter = session.get('paragraphed_letter') or []
+    return render_template('info.html', paragraphed_letter=paragraphed_letter)
 
 @app.route('/finalise', methods=['GET', 'POST'])
 def finalise():
@@ -131,7 +150,6 @@ def finalise():
         modified_letter = modify_letter(letter, instruction)
         return render_template('finalise.html', letter=modified_letter)
     return render_template('finalise.html')
-
 
 if __name__ == '__main__':
     app.run(debug=True)
