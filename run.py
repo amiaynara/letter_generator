@@ -121,7 +121,7 @@ def edit_para():
             # if there is actually a valid change requested
             modified_para = modify_para(data.get(f'para_{paragraph_index}'), instruction)
             paragraphs[f'para_{paragraph_index}'] = modified_para
-            session['paragraphed_letter'] = paragraphs.values()
+            session['paragraphed_letter'] = paragraphs
         else:
             # the request is missing the para_<id> then return the same letter.
             final_letter = '\n\n'.join(paragraphs.values())
