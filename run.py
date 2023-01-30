@@ -140,7 +140,7 @@ def finalise():
         letter = data.get('letter').replace('\n', '')
         instruction = data.get('instruction')
         modified_letter = modify_letter(letter, instruction)
-        return render_template('finalise.html', letter=modified_letter)
+        return render_template('finalise.html', letter=modified_letter, modified=True)
     return render_template('finalise.html')
 
 if __name__ == '__main__':
