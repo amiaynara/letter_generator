@@ -96,7 +96,7 @@ def parameters():
         paragraphed_letter = paragraph_letter(letter_generated)
         if len(paragraphed_letter) >= 2:
             session['paragraphed_letter'] = paragraphed_letter
-        return render_template('info.html', paragraphed_letter=paragraphed_letter)
+        return render_template('edit.html', paragraphed_letter=paragraphed_letter)
     return render_template('parameters.html')
 
 
@@ -128,15 +128,10 @@ def edit_para():
             session['paragraphed_letter'] = paragraphs
             return render_template('finalise.html', letter=final_letter)
         return render_template('edit.html', paragraphed_letter=paragraphs.values())
-    paragraphed_letter = session.get('paragraphed_letter')
+    paragraphed_letter = session.get('paragraphed_letter') or []
     if paragraphed_letter:
         return render_template('edit.html', paragraphed_letter=paragraphed_letter)
     return render_template('400_bad_request.html')
-
-@app.route('/info', methods=['GET'])
-def info():
-    paragraphed_letter = session.get('paragraphed_letter') or []
-    return render_template('info.html', paragraphed_letter=paragraphed_letter)
 
 @app.route('/finalise', methods=['GET', 'POST'])
 def finalise():
