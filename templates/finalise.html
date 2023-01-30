@@ -4,27 +4,51 @@
     Finalise
 {% endblock %}
 {% block content %}
-<div class="col-8">
-    <div class="card">
-        <h5 class="card-header text-center">Finalise your letter</h5>
-        <div class="card-body">
-            <form method="POST" action={{url_for('finalise')}}>
-                <textarea id="finalLetter" type="hidden" name="letter" rows="25" class="form-control" onchange="updateValue()">{{letter}}</textarea>   
-                <br><br>
-                <button type="button" class="btn btn-primary open-button" id="open-button" onclick="openForm()">Re-write Paragraph</button>
-                <div class="form-container" id="letterForm">
-                    <h5>Describe how to re-write.</h5>
-                    <input type="text" placeholder="eg. Use stronger tone" class="form-control" name="instruction"></input>      
-                    <button type="submit" id="para-submit-button" class="btn btn-primary">Re-write Now</button>
-                    <button type="button" class="btn btn-dander cancel" onclick="closeForm()">Back</button>
+    <div class="col-8">
+        <div class="card">
+            <h5 class="card-header text-center">Finalise your letter</h5>
+            <div class="card-body">
+                <form method="POST" action={{url_for('finalise')}}>
+                    <textarea id="finalLetter" type="hidden" name="letter" rows="25" class="form-control" onchange="updateValue()">{{letter}}</textarea>   
+                    <br><br>
+                    <button type="button" class="btn btn-primary open-button" id="open-button" onclick="openForm()">Re-write Paragraph</button>
+                    <div class="form-container" id="letterForm">
+                        <div>Describe how to re-write.</div>
+                        <div class="input-group input-group-sm">
+                            <input type="text" placeholder="eg. Use stronger tone" class="form-control" name="instruction"></input>
+                        </div>
+                        <button type="button" class="btn btn-sm btn-dander cancel" onclick="closeForm()">Back</button>
+                        <button type="submit" id="letter-submit-button" class="btn btn-sm btn-primary">Re-write Now</button>
+                    </div>
+                </form>
+                <button class="btn btn-success open-button" type="button" onclick="downloadPDF()">Export to PDF</button>
+                <div id="progress-container">
+                    <p id="action-text">Letter Generator at work...</p>
+                    <div id="letter-progress-line" class="progress-bar">
+                        <div class="progress"></div>
+                    </div>
                 </div>
-            </form>
-            <button class="btn btn-success open-button" type="button" onclick="downloadPDF()">Export to PDF</button>
+            </div>
         </div>
     </div>
-</div>
-
     <script>
+        // Get the button and spinner elements
+        var submitBtn = document.getElementById("letter-submit-button");
+        var progressBar = document.getElementById("progress-container");
+        var progressLine = document.getElementById("letter-progress-line");
+        function showProgress() {   
+            progressBar.style.display = "block";
+            setTimeout(() => {
+                progressLine.style.display = "none";
+                document.querySelector('.progress').style.animation = "none";
+                document.getElementById("action-text").innerHTML = "Done! Hang tight."
+            }, 10000);
+        }
+        // Add a click event listener to the button
+        if(submitBtn){
+            submitBtn.addEventListener("click", showProgress, false);
+        }
+
         function updateValue() {
             var inputValue = document.getElementById("finalLetter").value;
         }
@@ -35,6 +59,7 @@
             var text = document.getElementById("finalLetter").value;
             var paragraphs = text.split("\n\n");
 
+            // pdf.setFont("times");
             pdf.setFont("helvetica");
             pdf.setFontSize(12);
 
