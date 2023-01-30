@@ -9,13 +9,16 @@
             <h5 class="card-header text-center">Finalise your letter</h5>
             <div class="card-body">
                 <form method="POST" action={{url_for('finalise')}}>
-                    <textarea id="finalLetter" type="hidden" name="letter" rows="25" class="form-control" onchange="updateValue()">{{letter}}</textarea>   
+                    <textarea id="finalLetter" type="hidden" name="letter" rows="25" class="form-control" onchange="updateValue()">{{letter}}</textarea>
+                    {% if modified %}
+                        <span id="modified-tag">Modified</span>
+                    {% endif %}
                     <br><br>
                     <button type="button" class="btn btn-primary open-button" id="open-button" onclick="openForm()">Re-write Paragraph</button>
                     <div class="form-container" id="letterForm">
                         <div>Describe how to re-write.</div>
                         <div class="input-group input-group-sm">
-                            <input type="text" placeholder="eg. Use stronger tone" class="form-control" name="instruction"></input>
+                            <input type="text" placeholder="eg. Use stronger tone" class="form-control" id="instruction" name="instruction" onchange="onChange()" required></input>
                         </div>
                         <button type="button" class="btn btn-sm btn-dander cancel" onclick="closeForm()">Back</button>
                         <button type="submit" id="letter-submit-button" class="btn btn-sm btn-primary">Re-write Now</button>
@@ -32,11 +35,13 @@
         </div>
     </div>
     <script>
+        const onChange = (value) => {console.log(value);}
         // Get the button and spinner elements
         var submitBtn = document.getElementById("letter-submit-button");
         var progressBar = document.getElementById("progress-container");
         var progressLine = document.getElementById("letter-progress-line");
-        function showProgress() {   
+        function showProgress() {
+            if (!document.getElementById("instruction").value) return;
             progressBar.style.display = "block";
             setTimeout(() => {
                 progressLine.style.display = "none";
