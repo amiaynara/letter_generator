@@ -1,0 +1,128 @@
+body {font-family: Arial, Helvetica, sans-serif;}
+.card { 
+  margin-top: 2rem;
+}
+/* Button used to open the contact form - fixed at the bottom of the page */
+.open-button {
+  background-color: rgb(17, 9, 238);
+  color: white;
+  padding: 16px 20px;
+  border: none;
+  cursor: pointer;
+  opacity: 0.8;
+  width: 180px;
+  border-radius: 25px;
+  margin: 7px;
+}
+
+/* The popup form - hidden by default */
+.form-popup {
+  display: none;
+}
+
+/* Add styles to the form container */
+.form-container {
+  max-width: 300px;
+  padding: 10px;
+  background-color: white;
+  border: 1px solid gray;
+  border-radius: 25px;
+  display: none;
+  margin: 5px;
+}
+
+/* Full-width input fields */
+.form-container input[type=text] {
+  margin: 10px 0px;
+  border: none;
+  background: #f1f1f1;
+}
+
+/* When the inputs get focus, do something */
+.form-container input[type=text]:focus {
+  background-color: #ddd;
+  outline: none;
+}
+
+/* Set a style for the re-write now button */
+.form-container {
+  padding: 16px 20px;
+  border: 1px solid gray;
+  cursor: pointer;
+  width: 100%;
+  margin-bottom:10px;
+  opacity: 0.8;
+  border-radius: 25px;
+}
+
+/* Add a red background color to the back button */
+.form-container .cancel {
+  background-color: red;
+}
+
+/* Add some hover effects to buttons */
+.form-container .btn:hover, .open-button:hover {
+  opacity: 1;
+}
+
+.submit-btn {
+  background-color: rgb(31, 172, 31);
+  width: 130px;
+}
+
+/* styles for progress bar */
+[id^='progress-container'] {
+  display: none;
+}
+[class^='progress-bar'] {
+  width: 50%; /* adjust as needed */
+  height: 30px; /* adjust as needed */
+  background-color: #ddd;
+  border-radius: 5px;
+}
+
+[class^='progress'] {
+  width: 0%; /* initially set to 0% */
+  height: 100%;
+  background-color: #4CAF50; /* adjust as needed */
+  border-radius: 5px;
+  animation: loading 10s linear infinite;
+}
+@keyframes loading {
+  from { width: 0%; }
+  to { width: 100%; }
+}
+
+/*css for rewritten */
+[id^='tag'] {
+  margin: 7px 7px;
+  font-size: 10px;
+  visibility: hidden;
+  border: 1px solid rgb(7, 13, 180);
+  border-radius: 6px;
+  padding: 3px;
+  background:rgb(163, 166, 238);
+}
+#modified-tag {
+  margin: 7px 7px;
+  font-size: 10px;
+  border: 1px solid rgb(7, 13, 180);
+  border-radius: 6px;
+  padding: 3px;
+  background:rgb(163, 166, 238);
+}
+/* paragraph number styles */
+.paragraph-number {
+  display: block;
+  width: 2rem;
+  height: 30px;
+  font-size: 20px;
+  background-color: rgb(20, 144, 20);
+  padding: 0px 10px;
+  border-radius: 15px;
+  color: white;
+}
+
+.my-green-div {
+  color: green;
+}
