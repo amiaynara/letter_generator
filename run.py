@@ -27,7 +27,7 @@ para3 = '''I understand that financial difficulties can arise, but I
 
 # choose appriate location of keys
 amiay_dev = r'/Users/amiaynarayan/Projects/credential.json'
-python_anywhere = r'/home/coolexpert/keys/ten_question_config.json'
+python_anywhere = r"C:\Users\coole\Desktop\aakey_config.json"
 with open(python_anywhere) as config_file:
     config = json.load(config_file)
 
@@ -37,7 +37,7 @@ openai.api_key = config.get("OPENAI_API_KEY")
 
 def generate_letter(subject, word_count=DEFAULT_WORD_COUNT):
     '''Method to return the first draft of letters'''
-    search_query = f'I want to write a letter about "{subject}". I want the letter to be {word_count} words long.  Please use around 75 words per paragraph. \
+    search_query = f'Write a 3 paragraph document about "{subject}". I want the letter to be {word_count} words long.\
         please write the letter.'
     response = openai.Completion.create(
         engine="text-davinci-003",
