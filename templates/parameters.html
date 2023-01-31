@@ -6,7 +6,7 @@
 {% block content %}
     <div class="col-6">
         <div class="card">
-            <h5 class="card-header text-center">What did you want to write about?</h5>
+            <h5 class="card-header text-center">Write whats on you mind in 10 seconds</h5>
             <u>Examples</u><br>
             <br>Tell Joe that he owes me $100
             <br>Write a very nice love letter to Sally
@@ -18,7 +18,7 @@
                 <form method="POST" action="{{ url_for('parameters') }}">
                     <div class="form-floating">
                         <textarea class="form-control" id="instruction" name="instruction"></textarea>
-                        <label for="instruction">Write about anything... </label>
+                        <label for="instruction">Dare to write anything... </label>
                     </div>
                     <button id="submit-button" class="btn btn-success open-button submit-btn" type="submit">Submit</button>
                 </form>
