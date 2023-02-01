@@ -1,0 +1,70 @@
+{% extends "base.html" %}
+
+{% block title %}
+    Set Parameters
+{% endblock %}
+{% block content %}
+    <div class="col-8">
+        <div class="card">
+            <h5 class="card-header text-center">Write 150 words in 10 seconds</h5>
+            <br><u>Examples</u>
+            <br>Write Jennifer a romantic letter
+            <br>Ask Joe to return your underwear in a funny tone
+            <br>Write a speech at a wedding<br>
+
+
+    
+            <div class="card-body">
+                <form method="POST" action="{{ url_for('parameters') }}">
+                    <div class="form-floating">
+                        <textarea class="form-control" id="instruction" name="instruction"></textarea>
+                        <label for="instruction">Write something amazing... </label>
+                    </div>
+                    <button id="submit-button" class="btn btn-success open-button submit-btn" type="submit">Submit</button>
+                </form>
+                <div id="progress-container">
+                    <p id="action-text">Letter Generator at work...</p>
+                    <div id="progress-line" class="progress-bar">
+                        <div class="progress"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <script>
+        // remove the existing modifiedList, in case it exists on the browser
+        window.localStorage.removeItem('modifiedList');
+        // Get the button and spinner elements
+        var submitBtn = document.getElementById("submit-button");
+        var progressBar = document.getElementById("progress-container");
+        var progressLine = document.getElementById("progress-line");
+        function showProgress() {
+            progressBar.style.display = "block";
+            setTimeout(() => {
+                progressLine.style.display = "none";
+                document.querySelector('.progress').style.animation = "none";
+                document.getElementById("action-text").innerHTML = "Done! Hang tight. You will be redirected in a moment..."
+            }, 10000);
+        }
+        // Add a click event listener to the button
+        if(submitBtn){
+            submitBtn.addEventListener("click", showProgress, false);
+        }
+    </script>
+{% endblock %}
+
+<style>
+  @media only screen and (max-width: 767px) {
+    .col-8 {
+      width: 100%;
+    }
+    textarea {
+      width: 100%;
+    }
+    .card {
+      padding: 20px;
+    }
+  }
+</style>
