@@ -4,7 +4,7 @@
     Set Parameters
 {% endblock %}
 {% block content %}
-    <div class="col-8">
+    <div class="col-md-12 col-lg-10">
         <div class="card">
             <h5 class="card-header text-center">Write 150 words in 10 seconds</h5>
             <br><u>Examples</u>
@@ -13,7 +13,7 @@
             <br>Write a speech at a wedding<br>
 
 
-    
+
             <div class="card-body">
                 <form method="POST" action="{{ url_for('parameters') }}">
                     <div class="form-floating">
@@ -29,15 +29,15 @@
                     </div>
                 </div>
             </div>
-<script>
-  document.getElementById("instruction").addEventListener("input", function() {
-    this.style.height = "auto";
-    this.style.height = (this.scrollHeight) + "px";
-  });
-</script>
         </div>
     </div>
 
+    <script>
+    document.getElementById("instruction").addEventListener("input", function() {
+        this.style.height = "auto";
+        this.style.height = (this.scrollHeight) + "px";
+    });
+    </script>
 
     <script>
         // remove the existing modifiedList, in case it exists on the browser

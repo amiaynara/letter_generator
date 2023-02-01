@@ -130,7 +130,7 @@ def edit_para():
         return render_template('edit.html', paragraphed_letter=paragraphs.values())
     paragraphed_letter = session.get('paragraphed_letter') or []
     if paragraphed_letter:
-        return render_template('edit.html', paragraphed_letter=paragraphed_letter)
+        return render_template('edit.html', paragraphed_letter=paragraphed_letter.values())
     return render_template('400_bad_request.html')
 
 @app.route('/finalise', methods=['GET', 'POST'])
