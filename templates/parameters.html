@@ -4,14 +4,13 @@
     Set Parameters
 {% endblock %}
 {% block content %}
-    <div class="col-6">
+    <div class="col-8">
         <div class="card">
-            <h5 class="card-header text-center">Write something amazing in 10 seconds</h5>
+            <h5 class="card-header text-center">Write 150 words in 10 seconds</h5>
             <br><u>Examples</u>
             <br>Write Jennifer a romantic letter
             <br>Ask Joe to return your underwear in a funny tone
             <br>Write a speech at a wedding<br>
-
 
 
     
@@ -19,7 +18,7 @@
                 <form method="POST" action="{{ url_for('parameters') }}">
                     <div class="form-floating">
                         <textarea class="form-control" id="instruction" name="instruction"></textarea>
-                        <label for="instruction">Write about anything... </label>
+                        <label for="instruction">Write something amazing... </label>
                     </div>
                     <button id="submit-button" class="btn btn-success open-button submit-btn" type="submit">Submit</button>
                 </form>
