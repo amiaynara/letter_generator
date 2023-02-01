@@ -4,28 +4,35 @@
     Set Parameters
 {% endblock %}
 {% block content %}
-    <div class="col-md-12 col-lg-10">
+    <div class="col-md-12 col-lg-8">
         <div class="card">
             <h5 class="card-header text-center">Write 150 words in 10 seconds</h5>
-            <br><u>Examples</u>
-            <br>Write Jennifer a romantic letter
-            <br>Ask Joe to return your underwear in a funny tone
-            <br>Write a speech at a wedding<br>
-
-
-
             <div class="card-body">
-                <form method="POST" action="{{ url_for('parameters') }}">
-                    <div class="form-floating">
-                        <textarea class="form-control" id="instruction" name="instruction" style="resize: none; overflow: hidden;"></textarea>
-                        <label for="instruction">Write something amazing... </label>
-                    </div>
-                    <button id="submit-button" class="btn btn-success open-button submit-btn" type="submit">Submit</button>
-                </form>
-                <div id="progress-container">
-                    <p id="action-text">Letter Generator at work...</p>
-                    <div id="progress-line" class="progress-bar">
-                        <div class="progress"></div>
+                <div class="container-md">
+                    <div class="row">
+                        <div class="col-12 col-md-12 examples">
+                            <p class="h4 text-muted">Examples</p>
+                            <ul class="list-group list-group-flush">
+                                <li class="list-group-item">Write Jennifer a romantic letter</li>
+                                <li class="list-group-item">Ask Joe to return your underwear in a funny tone</li>
+                                <li class="list-group-item">Write a speech at a wedding</li>
+                            </ul>
+                        </div>
+                        <div class="col-12 col-md-12">
+                            <form method="POST" action="{{ url_for('parameters') }}">
+                                <div class="form-floating">
+                                    <textarea rows="4" class="form-control" id="instruction" name="instruction" style="resize: none; overflow: hidden;"></textarea>
+                                    <label for="instruction">Write something amazing... </label>
+                                </div>
+                                <button id="submit-button" class="btn btn-success open-button submit-btn" type="submit">Submit</button>
+                            </form>
+                            <div id="progress-container">
+                                <p id="action-text">Letter Generator at work...</p>
+                                <div id="progress-line" class="progress-bar">
+                                    <div class="progress"></div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>

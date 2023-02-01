@@ -51,7 +51,7 @@ def generate_letter(subject, word_count=DEFAULT_WORD_COUNT):
     return letter
 
 def modify_para(paragraph, instruction):
-    search_query = f'Keeping this instruction in mind: {instruction}; modify the paragraph:\n{paragraph}'
+    search_query = f'Given is a paragraph:\n{paragraph}\n. Include the original text of the paragraph but add {instruction}'
     response = openai.Completion.create(
         engine="text-davinci-003",
         prompt=search_query,
@@ -64,7 +64,7 @@ def modify_para(paragraph, instruction):
     return new_paragraph.replace('"', '').replace('\n', '')
 
 def modify_letter(letter, instruction):
-    search_query = f'Given is a letter. Keeping this instruction in mind: {instruction}; modify the letter:\n{letter}. Also structure the letter into paragraphs.'
+    search_query = f'Given is a letter:\n{letter}\n. Include the original text of the letter, but add {instruction}. Also structure the letter into paragraphs.'
     response = openai.Completion.create(
         engine="text-davinci-003",
         prompt=search_query,
