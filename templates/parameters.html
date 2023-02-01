@@ -17,7 +17,7 @@
             <div class="card-body">
                 <form method="POST" action="{{ url_for('parameters') }}">
                     <div class="form-floating">
-                        <textarea class="form-control" id="instruction" name="instruction"></textarea>
+                        <textarea class="form-control" id="instruction" name="instruction" style="resize: none; overflow: hidden;"></textarea>
                         <label for="instruction">Write something amazing... </label>
                     </div>
                     <button id="submit-button" class="btn btn-success open-button submit-btn" type="submit">Submit</button>
@@ -29,6 +29,12 @@
                     </div>
                 </div>
             </div>
+<script>
+  document.getElementById("instruction").addEventListener("input", function() {
+    this.style.height = "auto";
+    this.style.height = (this.scrollHeight) + "px";
+  });
+</script>
         </div>
     </div>
 
@@ -55,16 +61,3 @@
     </script>
 {% endblock %}
 
-<style>
-  @media only screen and (max-width: 767px) {
-    .col-8 {
-      width: 100%;
-    }
-    textarea {
-      width: 100%;
-    }
-    .card {
-      padding: 20px;
-    }
-  }
-</style>
