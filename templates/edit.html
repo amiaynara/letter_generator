@@ -15,7 +15,7 @@
                             <div class="col-2 col-md-1 align-self-center">
                                <span class="paragraph-number">{{ loop.index }}</span>
                             </div>
-                            <div class="col-10 col-md-9">
+                            <div class="col-9 col-md-9">
                                 <div class="form-group">
                                     <textarea rows="4" class="form-control" name="para_{{ loop.index }}">{{ paragraph }}</textarea>
                                 </div>
@@ -28,7 +28,7 @@
                                     <button type="submit" class="btn btn-sm btn-info" id="para-submit-button-{{loop.index}}" onclick="savePara({{loop.index}})">Re-write Now</button>
                                 </div>
                             </div>
-                            <div class="col-md-1 self-align-center">
+                            <div class="col-md-2 self-align-center">
                                <button type="button" class="btn btn-sm btn-outline-success open-button my-button" id="open-button-{{loop.index}}" onclick="openForm({{loop.index}})">Edit</button>
                                <style>
                                   .my-button {
