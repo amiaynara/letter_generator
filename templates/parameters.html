@@ -4,6 +4,30 @@
     Set Parameters
 {% endblock %}
 {% block content %}
+
+    <head>
+    <style>
+        textarea {
+          width: 100%;
+        }
+        .card {
+          padding: 20px;
+        }
+        @media only screen and (max-width: 767px) {
+          .col-8 {
+            width: 100%;
+          }
+          textarea {
+            width: 100%;
+          }
+          .card {
+            padding: 20px;
+          }
+        }
+      </style>
+    </head>
+
+
     <div class="col-8">
         <div class="card">
             <h5 class="card-header text-center">Write 150 words in 10 seconds</h5>
@@ -55,16 +79,4 @@
     </script>
 {% endblock %}
 
-<style>
-  @media only screen and (max-width: 767px) {
-    .col-8 {
-      width: 100%;
-    }
-    textarea {
-      width: 100%;
-    }
-    .card {
-      padding: 20px;
-    }
-  }
-</style>
+
