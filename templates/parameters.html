@@ -24,7 +24,8 @@
                                     <textarea rows="4" class="form-control" id="instruction" name="instruction" style="resize: none; overflow: hidden;"></textarea>
                                     <label for="instruction">Write something amazing... </label>
                                 </div>
-                                <button id="submit-button" class="btn btn-success open-button submit-btn" type="submit">Submit</button>
+                                <button id="submit-button" class="btn btn-success open-button open-button" type="submit">Submit</button>
+                                <!-- {% include 'my_button.html' %} -->
                             </form>
                             <div id="progress-container">
                                 <p id="action-text">Letter Generator at work...</p>
@@ -59,7 +60,7 @@
                 progressLine.style.display = "none";
                 document.querySelector('.progress').style.animation = "none";
                 document.getElementById("action-text").innerHTML = "Done! Hang tight. You will be redirected in a moment..."
-            }, 10000);
+            }, 15000);
         }
         // Add a click event listener to the button
         if(submitBtn){
