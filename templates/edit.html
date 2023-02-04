@@ -17,7 +17,15 @@
                             </div>
                             <div class="col-9 col-md-9">
                                 <div class="form-group">
-                                    <textarea rows="4" class="form-control" name="para_{{ loop.index }}">{{ paragraph }}</textarea>
+                                <!-- Include the Autosize.js library -->
+                                <script src="https://cdn.jsdelivr.net/npm/autosize@4.0.2/dist/autosize.min.js"></script>
+
+                                <textarea rows="4" class="form-control" name="para_{{ loop.index }}" id="textarea_{{ loop.index }}">{{ paragraph }}</textarea>
+
+                                <script>
+                                // Call the autosize function on the textarea
+                                autosize(document.getElementById("textarea_{{ loop.index }}"));
+                                </script>
                                 </div>
                                 <div class="form-container" id="myForm-{{ loop.index }}">
                                     <div>Describe how to re-write</div>
