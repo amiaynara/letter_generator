@@ -1,6 +1,16 @@
 <!DOCTYPE html>
 <html>
 <head>
+    <!-- Information about website and creator -->
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <!-- Defines the compatibility of version with browser -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- for make website responsive -->
+    <meta name="author" content="Amiay Narayan">
+    <meta name="" content="" >
+    <!-- To give information about author or owner -->
+    <meta name="description" content="Write any piece of short composition in just a few seconds using AI.">
   <title>{% block title %}Letter Generator{% endblock %}</title>
   <!--css files-->
   <link rel="stylesheet" type="text/css" href="{{url_for('static', filename='css/my_styles.css')}}">
@@ -13,11 +23,11 @@
 <body>
   <div class="container-md content-box">
     <div class="row">
-      <div class="col-12 col-lg-2">
+      <div class="col-12 col-lg-3">
       </div>
         {% block content %}
         {% endblock %}
-      <div class="col-12 col-lg-2">
+      <div class="col-12 col-lg-3">
       </div>
     </div>
   </div>
