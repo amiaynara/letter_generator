@@ -4,7 +4,7 @@ body {font-family: Arial, Helvetica, sans-serif;}
 }
 /* Button used to open the contact form - fixed at the bottom of the page */
 .open-button {
-  background-color: rgb(17, 9, 238);
+  background-color: #0018F9;
   color: white;
   padding: 16px 20px;
   border: none;
@@ -46,6 +46,7 @@ body {font-family: Arial, Helvetica, sans-serif;}
 
 /* Set a style for the re-write now button */
 .form-container {
+  display: none;
   padding: 16px 20px;
   border: 1px solid gray;
   cursor: pointer;
@@ -53,6 +54,7 @@ body {font-family: Arial, Helvetica, sans-serif;}
   margin-bottom:10px;
   opacity: 0.8;
   border-radius: 25px;
+  margin: 5px;
 }
 
 /* Add a red background color to the back button */
@@ -86,7 +88,7 @@ body {font-family: Arial, Helvetica, sans-serif;}
   height: 100%;
   background-color: #4CAF50; /* adjust as needed */
   border-radius: 5px;
-  animation: loading 10s linear infinite;
+  animation: loading 15s linear infinite;
 }
 @keyframes loading {
   from { width: 0%; }
@@ -95,14 +97,10 @@ body {font-family: Arial, Helvetica, sans-serif;}
 
 /*css for rewritten */
 [id^='tag'] {
-  margin: 7px 7px;
-  font-size: 10px;
   visibility: hidden;
-  border: 1px solid rgb(7, 13, 180);
-  border-radius: 6px;
-  padding: 3px;
-  background:rgb(163, 166, 238);
+  margin: 4px 16px;
 }
+
 #modified-tag {
   margin: 7px 7px;
   font-size: 10px;
@@ -123,8 +121,9 @@ body {font-family: Arial, Helvetica, sans-serif;}
   color: white;
 }
 
-.my-green-div {
-  color: green;
+.my-button {
+  width: 70px;
+  margin: 4px 16px;
 }
 
 .examples {
@@ -132,10 +131,14 @@ body {font-family: Arial, Helvetica, sans-serif;}
   margin-bottom: 1rem;
 }
 
+.paragraph-number-container {
+  padding: 0px !important;
+}
+
 @media (min-width: 768px) {
   body {
-    font-size: 1.5rem;
     margin: 0px;
+    background-color: blues;
   }
   .container-md {
     margin: 0px;
