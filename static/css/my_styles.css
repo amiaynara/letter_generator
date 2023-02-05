@@ -143,7 +143,6 @@ color: #ffffff;
 @media (max-width: 768px) {
   body {
     margin: 0px;
-    background-color: blue;
   }
   .container-md {
     margin: 0px;
