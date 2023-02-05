@@ -4,7 +4,7 @@ body {font-family: Poppins, Arial, Helvetica, sans-serif;}
 }
 /* Button used to open the contact form - fixed at the bottom of the page */
 .open-button {
-  background-color: #0018F9;
+  background: linear-gradient(to right, rgb(103, 23, 205), rgb(41, 111, 249));
   color: white;
   padding: 16px 20px;
   border: none;
@@ -133,6 +133,11 @@ body {font-family: Poppins, Arial, Helvetica, sans-serif;}
 
 .paragraph-number-container {
   padding: 0px !important;
+}
+
+.card-header {
+background: linear-gradient(to right, rgb(103, 23, 205), rgb(41, 111, 249));
+color: #ffffff;
 }
 
 @media (max-width: 768px) {
