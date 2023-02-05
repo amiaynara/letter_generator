@@ -13,7 +13,10 @@
                     {% if modified %}
                         <span class="badge rounded-pill text-bg-info" id="modified-tag">Modified</span>
                     {% endif %}
-                    <br><br>
+                    <br>
+                    <div>
+                        <a href='/edit_para' type="button" class="btn btn-sm btn-danger open-button">Back</a>
+                    </div>
                     <button type="button" class="btn btn-primary open-button" id="open-button" onclick="openForm()">Re-write Paragraph</button>
                     <div class="form-container" id="letterForm">
                         <div>Describe how to re-write.</div>
@@ -25,9 +28,6 @@
                     </div>
                 </form>
                 <button class="btn btn-success open-button" type="button" onclick="downloadPDF()">Export to PDF</button>
-                <form action={{ url_for('edit_para') }} method="GET">
-                    <button type="submit" class="btn btn-sm btn-danger open-button">Back</button>
-                </form>
                 <div id="progress-container">
                     <p id="action-text">Letter Generator at work...</p>
                     <div id="letter-progress-line" class="progress-bar">
