@@ -9,7 +9,7 @@
             <h5 class="card-header text-center">Here you go ...</h5>
             <div class="card-body">
                 <form method="POST" action={{url_for('finalise')}}>
-                    <textarea id="finalLetter" type="hidden" name="letter" rows="25" class="form-control" onchange="updateValue()">{{letter}}</textarea>
+                    <textarea id="finalLetter" type="hidden" name="letter" rows="25" class="form-control text-area-with-thinner-font" onchange="updateValue()">{{letter}}</textarea>
                     {% if modified %}
                         <span class="badge rounded-pill text-bg-info" id="modified-tag">Modified</span>
                     {% endif %}
@@ -30,8 +30,8 @@
                 <button class="btn btn-success open-button" type="button" onclick="downloadPDF()">Export to PDF</button>
                 <div id="progress-container">
                     <p id="action-text">Letter Generator at work...</p>
-                    <div id="letter-progress-line" class="progress-bar">
-                        <div class="progress"></div>
+                    <div id="bootstrapProgress" class="progress" role="progressbar" aria-valuenow="10" aria-valuemin="0" aria-valuemax="100">
+                        <div class="progress-bar progress-bar-striped" style="width: 10%"></div>
                     </div>
                 </div>
             </div>
@@ -104,5 +104,27 @@
           document.getElementById('letterForm').style.display = "none";
           document.getElementById(`open-button`).style.display = "block";
         }
+    </script>
+    <script>
+        const startButton = document.getElementById("submit-button");
+        const progressBar = document.getElementById("progress-container");
+        const bootstrapProgress = document.getElementById("bootstrapProgress");
+        let currentValue = 0;
+        let interval;
+        const numberOfSeconds = 15;
+        const times = 10 * numberOfSeconds;
+        startButton.addEventListener("click", () => {
+            progressBar.style.display = "block";
+            interval = setInterval(() => {
+                if (currentValue >= times) {
+                        clearInterval(interval);
+                        bootstrapProgress.style.display = "none";
+                        document.getElementById("action-text").innerHTML = "Done! Hang tight. You will be redirected in a moment...";
+                    }
+                    bootstrapProgress.style.width = `${currentValue}%`;
+                    bootstrapProgress.setAttribute("aria-valuenow", currentValue);
+                    currentValue++;
+            }, 100);
+        });
     </script>
 {% endblock %}

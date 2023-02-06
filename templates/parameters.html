@@ -29,43 +29,44 @@
                             </form>
                             <div id="progress-container">
                                 <p id="action-text">Letter Generator at work...</p>
-                                <div id="progress-line" class="progress-bar">
-                                    <div class="progress"></div>
+                                <div id="bootstrapProgress" class="progress" role="progressbar" aria-valuenow="10" aria-valuemin="0" aria-valuemax="100">
+                                    <div class="progress-bar progress-bar-striped" style="width: 10%"></div>
                                 </div>
                             </div>
+
                         </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-
+    <script>
+        const startButton = document.getElementById("submit-button");
+        const progressBar = document.getElementById("progress-container");
+        const bootstrapProgress = document.getElementById("bootstrapProgress");
+        let currentValue = 0;
+        let interval;
+        const numberOfSeconds = 15;
+        const times = 10 * numberOfSeconds;
+        startButton.addEventListener("click", () => {
+            progressBar.style.display = "block";
+            interval = setInterval(() => {
+                if (currentValue >= times) {
+                        clearInterval(interval);
+                        bootstrapProgress.style.display = "none";
+                        document.getElementById("action-text").innerHTML = "Done! Hang tight. You will be redirected in a moment..."
+                    }
+                    bootstrapProgress.style.width = `${currentValue}%`;
+                    bootstrapProgress.setAttribute("aria-valuenow", currentValue);
+                    currentValue++;
+            }, 100);
+        });
+    </script>
     <script>
     document.getElementById("instruction").addEventListener("input", function() {
         this.style.height = "auto";
         this.style.height = (this.scrollHeight) + "px";
     });
-    </script>
-
-    <script>
-        // remove the existing modifiedList, in case it exists on the browser
-        window.localStorage.removeItem('modifiedList');
-        // Get the button and spinner elements
-        var submitBtn = document.getElementById("submit-button");
-        var progressBar = document.getElementById("progress-container");
-        var progressLine = document.getElementById("progress-line");
-        function showProgress() {
-            progressBar.style.display = "block";
-            setTimeout(() => {
-                progressLine.style.display = "none";
-                document.querySelector('.progress').style.animation = "none";
-                document.getElementById("action-text").innerHTML = "Done! Hang tight. You will be redirected in a moment..."
-            }, 15000);
-        }
-        // Add a click event listener to the button
-        if(submitBtn){
-            submitBtn.addEventListener("click", showProgress, false);
-        }
     </script>
 {% endblock %}
 

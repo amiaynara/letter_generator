@@ -85,8 +85,8 @@ body {font-family: Poppins, Arial, Helvetica, sans-serif;}
 
 [class^='progress'] {
   width: 0%; /* initially set to 0% */
-  height: 100%;
-  background-color: #4CAF50; /* adjust as needed */
+  height: 16px;
+  background-color: #5c4caf; /* adjust as needed */
   border-radius: 5px;
   animation: loading 15s linear infinite;
 }
@@ -138,6 +138,11 @@ body {font-family: Poppins, Arial, Helvetica, sans-serif;}
 .card-header {
 background: linear-gradient(to right, rgb(103, 23, 205), rgb(41, 111, 249));
 color: #ffffff;
+}
+
+/* this is the css rules for text area on edit and finalise page */
+.text-area-with-thinner-font {
+  font-weight: 300;
 }
 
 @media (max-width: 768px) {
