@@ -40,7 +40,7 @@ def generate_letter(subject, word_count=DEFAULT_WORD_COUNT):
     search_query = f'Write a 3 paragraph document about "{subject}". I want the letter to be {word_count} words long.\
         please write the letter.'
     response = openai.Completion.create(
-        engine="text-davinci-003",
+        engine="text-davinci-002",
         prompt=search_query,
         max_tokens=1024,
         n=1,
