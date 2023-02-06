@@ -20,7 +20,7 @@
                                 <!-- Include the Autosize.js library -->
                                 <script src="https://cdn.jsdelivr.net/npm/autosize@4.0.2/dist/autosize.min.js"></script>
 
-                                <textarea rows="4" class="form-control" name="para_{{ loop.index }}" id="textarea_{{ loop.index }}">{{ paragraph }}</textarea>
+                                <textarea rows="4" class="form-control text-area-with-thinner-font" name="para_{{ loop.index }}" id="textarea_{{ loop.index }}">{{ paragraph }}</textarea>
 
                                 <script>
                                 // Call the autosize function on the textarea
@@ -82,14 +82,24 @@
                 window.localStorage.setItem('modifiedList', JSON.stringify([index]));
             }
         }
+        const numberOfSeconds = 15;
+        const times = 10 * numberOfSeconds;
+        let currentValue = 0;
+        let interval;
         function showProgress(index) {
             document.getElementById(`progress-container-${index}`).style.display = "block";
-            setTimeout(() => {
-                document.getElementById(`progress-line-${index}`).style.display = "none";
-                document.getElementById(`action-text-${index}`).style.display = "none";
-                document.querySelector('.progress').style.display = "none";
-                document.getElementById(`tag-${index}`).style.visibility = "visible";
-            }, 10000);
+            interval = setInterval(() => {
+                if (currentValue >= times) {
+                        clearInterval(interval);
+                        document.getElementById(`progress-line-${index}`).style.display = "none";
+                        document.getElementById(`action-text-${index}`).style.display = "none";
+                        document.querySelector('.progress').style.display = "none";
+                        document.getElementById(`tag-${index}`).style.visibility = "visible";
+                    }
+                    bootstrapProgress.style.width = `${currentValue}%`;
+                    bootstrapProgress.setAttribute("aria-valuenow", currentValue);
+                    currentValue++;
+            }, 100);
         }
         {% for paragraph in paragraphed_letter %}
             var submitBtn = document.getElementById('para-submit-button-{{loop.index}}');
