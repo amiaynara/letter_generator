@@ -1,0 +1,72 @@
+{% extends "base.html" %}
+
+{% block title %}
+    Set Parameters
+{% endblock %}
+{% block content %}
+    <div class="col-md-12 col-lg-8">
+        <div class="card">
+            <h5 class="card-header text-center">Write Anything</h5>
+            <div class="card-body">
+                <div class="container-md">
+                    <div class="row">
+                        <div class="col-12 col-md-12 examples">
+                            <p class="h4 text-muted">Examples</p>
+                            <ul class="list-group list-group-flush">
+                                <li class="list-group-item">Write a cover letter to be a waiter</li>
+                                <li class="list-group-item">Write an article about how to become wealthy</li>
+                                <li class="list-group-item">Write a blog about cheapest places to travel</li>
+                            </ul>
+                        </div>
+                        <div class="col-12 col-md-12">
+                            <form method="POST" action="{{ url_for('parameters') }}">
+                                <div class="form-floating">
+                                    <textarea rows="4" class="form-control" id="instruction" name="instruction" style="resize: none; overflow: hidden;"></textarea>
+                                    <label for="instruction">Write something amazing... </label>
+                                </div>
+                                <button id="submit-button" class="btn btn-success open-button open-button" type="submit">Submit</button>
+                                <!-- {% include 'my_button.html' %} -->
+                            </form>
+                            <div id="progress-container">
+                                <p id="action-text">Letter Generator at work...</p>
+                                <div id="bootstrapProgress" class="progress" role="progressbar" aria-valuenow="10" aria-valuemin="0" aria-valuemax="100">
+                                    <div class="progress-bar progress-bar-striped" style="width: 10%"></div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        const startButton = document.getElementById("submit-button");
+        const progressBar = document.getElementById("progress-container");
+        const bootstrapProgress = document.getElementById("bootstrapProgress");
+        let currentValue = 0;
+        let interval;
+        const numberOfSeconds = 15;
+        const times = 10 * numberOfSeconds;
+        startButton.addEventListener("click", () => {
+            progressBar.style.display = "block";
+            interval = setInterval(() => {
+                if (currentValue >= times) {
+                        clearInterval(interval);
+                        bootstrapProgress.style.display = "none";
+                        document.getElementById("action-text").innerHTML = "Done! Hang tight. You will be redirected in a moment..."
+                    }
+                    bootstrapProgress.style.width = `${currentValue}%`;
+                    bootstrapProgress.setAttribute("aria-valuenow", currentValue);
+                    currentValue++;
+            }, 100);
+        });
+    </script>
+    <script>
+    document.getElementById("instruction").addEventListener("input", function() {
+        this.style.height = "auto";
+        this.style.height = (this.scrollHeight) + "px";
+    });
+    </script>
+{% endblock %}
+
