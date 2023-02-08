@@ -43,7 +43,7 @@
                                 </div>
                             </div>
                             <div class="col-12 col-md-2 self-align-center my-button">
-                               <button type="button" class="btn btn-sm btn-outline-success open-button my-button" id="open-button-{{loop.index}}" onclick="openForm({{loop.index}})">Edit</button>
+                               <button type="button" class="btn btn-sm btn-outline-success open-button my-button" id="open-button-{{loop.index}}" onclick="openForm({{loop.index}})">Add</button>
                                <span class="badge rounded-pill text-bg-info" id="tag-{{loop.index}}">Modified</span>
                             </div>
                          </div>
@@ -63,6 +63,7 @@
             textarea.on("input", function() {
             this.style.height = "";
             this.style.height = this.scrollHeight + "px";
+            this.style.paddingBottom = "1em";
             });
             textarea.trigger("input");
         {% endfor %}
