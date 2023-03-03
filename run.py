@@ -1,7 +1,10 @@
 import json
+import os
 import re
-from flask import Flask, render_template, request, session
+from flask import Flask, render_template, request, session, url_for, jsonify, redirect
 import openai
+
+from docs_utility import create_document, get_document
 
 app = Flask(__name__)
 app.secret_key = "super secret key"
@@ -143,5 +146,120 @@ def finalise():
         return render_template('finalise.html', letter=modified_letter, modified=True)
     return render_template('finalise.html')
 
+##### Google docs API routes #####
+import google.oauth2.credentials
+import google_auth_oauthlib.flow
+from googleapiclient.discovery import build
+
+# This variable specifies the name of a file that contains the OAuth 2.0
+# information for this application, including its client_id and client_secret.
+CLIENT_SECRETS_FILE = "client_secret.json"
+
+# This OAuth 2.0 access scope allows for full read/write access to the
+# authenticated user's account and requires requests to use an SSL connection.
+SCOPES = [
+    'https://www.googleapis.com/auth/documents',
+    'https://www.googleapis.com/auth/drive',
+    ]
+API_SERVICE_NAME = 'docs'
+API_VERSION = 'v1'
+DOCUMENT_ID = '18HKKU-xOVcSE-7r7kjigXXzYwiQd25hJN4pSvUbijzI'
+
+@app.route('/test', methods=['GET', 'POST'])
+def test_api_request():
+    if 'credentials' not in session:
+        return redirect('authorize')
+    
+    # Load credentials from the session.
+    credentials = google.oauth2.credentials.Credentials(
+        **session['credentials'])
+
+    docs_service = build(
+        API_SERVICE_NAME, API_VERSION, credentials=credentials)
+    drive_service = build('drive', 'v3', credentials=credentials)
+
+    response = create_document(docs_service, drive_service, [para1, para2, para3])
+    if response == 'error':
+        print(response)
+    # create_document(service)
+
+    # Save credentials back to session in case access token was refreshed.
+    # ACTION ITEM: In a production app, you likely want to save these
+    #              credentials in a persistent database instead.
+    session['credentials'] = credentials_to_dict(credentials)
+
+    return jsonify(response)
+
+
+@app.route('/oauth2callback')
+def oauth2callback():
+  # Specify the state when creating the flow in the callback so that it can
+  # verified in the authorization server response.
+  state = session['state']
+
+  flow = google_auth_oauthlib.flow.Flow.from_client_secrets_file(
+      CLIENT_SECRETS_FILE, scopes=SCOPES, state=state)
+  flow.redirect_uri = url_for('oauth2callback', _external=True)
+
+  # Use the authorization server's response to fetch the OAuth 2.0 tokens.
+  authorization_response = request.url
+  flow.fetch_token(authorization_response=authorization_response)
+
+  # Store credentials in the session.
+  # ACTION ITEM: In a production app, you likely want to save these
+  #              credentials in a persistent database instead.
+  credentials = flow.credentials
+  session['credentials'] = credentials_to_dict(credentials)
+
+  return redirect(url_for('test_api_request'))
+
+
+@app.route('/authorize')
+def authorize():
+  # Create flow instance to manage the OAuth 2.0 Authorization Grant Flow steps.
+  flow = google_auth_oauthlib.flow.Flow.from_client_secrets_file(
+      CLIENT_SECRETS_FILE, scopes=SCOPES)
+
+  # The URI created here must exactly match one of the authorized redirect URIs
+  # for the OAuth 2.0 client, which you configured in the API Console. If this
+  # value doesn't match an authorized URI, you will get a 'redirect_uri_mismatch'
+  # error.
+  flow.redirect_uri = url_for('oauth2callback', _external=True)
+  print('the created url is', flow.redirect_uri)
+
+  authorization_url, state = flow.authorization_url(
+      # Enable offline access so that you can refresh an access token without
+      # re-prompting the user for permission. Recommended for web server apps.
+      access_type='offline',
+      # Enable incremental authorization. Recommended as a best practice.
+      include_granted_scopes='true')
+
+  # Store the state so the callback can verify the auth server response.
+  session['state'] = state
+
+  return redirect(authorization_url)
+
+def credentials_to_dict(credentials):
+    return {
+        'token': credentials.token,
+        'refresh_token': credentials.refresh_token,
+        'token_uri': credentials.token_uri,
+        'client_id': credentials.client_id,
+        'client_secret': credentials.client_secret,
+        'scopes': credentials.scopes
+    }
+
+@app.route('/clear')
+def clear_credentials():
+    if 'credentials' in session:
+        del session['credentials']
+    return ('Credentials have been cleared.<br><br>' + '<h1>Amiay</h1>')
+
+
 if __name__ == '__main__':
+    # When running locally, disable OAuthlib's HTTPs verification.
+    # ACTION ITEM for developers:
+    #     When running in production *do not* leave this option enabled.
+    os.environ['OAUTHLIB_INSECURE_TRANSPORT'] = '1'
+
     app.run(debug=True)
