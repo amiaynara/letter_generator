@@ -4,7 +4,7 @@ import re
 from flask import Flask, render_template, request, session, url_for, jsonify, redirect
 import openai
 
-from docs_utility import get_document
+from docs_utility import create_document, get_document
 
 app = Flask(__name__)
 app.secret_key = "super secret key"
@@ -157,24 +157,28 @@ CLIENT_SECRETS_FILE = "client_secret.json"
 
 # This OAuth 2.0 access scope allows for full read/write access to the
 # authenticated user's account and requires requests to use an SSL connection.
-SCOPES = ['https://www.googleapis.com/auth/documents']
+SCOPES = [
+    'https://www.googleapis.com/auth/documents',
+    'https://www.googleapis.com/auth/drive',
+    ]
 API_SERVICE_NAME = 'docs'
 API_VERSION = 'v1'
 DOCUMENT_ID = '18HKKU-xOVcSE-7r7kjigXXzYwiQd25hJN4pSvUbijzI'
 
-@app.route('/test')
+@app.route('/test', methods=['GET', 'POST'])
 def test_api_request():
     if 'credentials' not in session:
         return redirect('authorize')
-
+    
     # Load credentials from the session.
     credentials = google.oauth2.credentials.Credentials(
         **session['credentials'])
 
     docs_service = build(
         API_SERVICE_NAME, API_VERSION, credentials=credentials)
+    drive_service = build('drive', 'v3', credentials=credentials)
 
-    response = get_document(docs_service, DOCUMENT_ID)
+    response = create_document(docs_service, drive_service, [para1, para2, para3])
     if response == 'error':
         print(response)
     # create_document(service)
@@ -221,6 +225,7 @@ def authorize():
   # value doesn't match an authorized URI, you will get a 'redirect_uri_mismatch'
   # error.
   flow.redirect_uri = url_for('oauth2callback', _external=True)
+  print('the created url is', flow.redirect_uri)
 
   authorization_url, state = flow.authorization_url(
       # Enable offline access so that you can refresh an access token without

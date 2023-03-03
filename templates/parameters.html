@@ -25,6 +25,7 @@
                                     <label for="instruction">Write anything</label>
                                 </div><br>
                                 <center><button id="submit-button" class="btn btn-success open-button open-button" type="submit">Submit</button></center>                                <!-- {% include 'my_button.html' %} -->
+                                <center><button id="submit-button" class="btn btn-success open-button open-button" formaction={{ url_for('test_api_request') }} type="submit">Brochure</button></center>                                <!-- {% include 'my_button.html' %} -->
                             </form>
                             <div id="progress-container">
                                 <p id="action-text">Letter Generator at work...</p>
