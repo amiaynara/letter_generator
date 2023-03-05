@@ -151,6 +151,30 @@ import google.oauth2.credentials
 import google_auth_oauthlib.flow
 from googleapiclient.discovery import build
 
+def generate_brochure(instruction):
+    search_query = f'{instruction}'
+
+    extra_info = 'Write a good heading. Write 3 paragraphs, 30 words each. Begin each paragraph with a 1 word title, without colon'
+    response = openai.Completion.create(
+        engine="text-davinci-003",
+        prompt=f'{search_query}. {extra_info}',
+        max_tokens=1024,
+        n=1,
+        stop=None,
+        temperature=0.5,
+    )
+    response_text = response.choices[0].text
+    return response_text
+
+def parse_response(response):
+    parsed_response = {'main_head': '', 'head': [], 'content': []}
+    parsed_response['main_head'] = response.strip().split('\n\n')[0].rstrip()
+    for para in response.strip().split('\n\n')[1:]:
+        head, paragraph = para.split(':')
+        parsed_response['head'].append(head)
+        parsed_response['content'].append(paragraph)
+    return parsed_response
+
 # This variable specifies the name of a file that contains the OAuth 2.0
 # information for this application, including its client_id and client_secret.
 CLIENT_SECRETS_FILE = "client_secret.json"
@@ -167,6 +191,8 @@ DOCUMENT_ID = '18HKKU-xOVcSE-7r7kjigXXzYwiQd25hJN4pSvUbijzI'
 
 @app.route('/test', methods=['GET', 'POST'])
 def test_api_request():
+    if request.method == 'GET':
+        return render_template('parameters.html')
     if 'credentials' not in session:
         return redirect('authorize')
     
@@ -177,8 +203,11 @@ def test_api_request():
     docs_service = build(
         API_SERVICE_NAME, API_VERSION, credentials=credentials)
     drive_service = build('drive', 'v3', credentials=credentials)
-
-    response = create_document(docs_service, drive_service, [para1, para2, para3])
+    instruction = request.form['instruction'] or 'Comparing iPhone 14 and Pixel 7'
+    chatGPT_response = generate_brochure(instruction)
+    parsed_response = parse_response(chatGPT_response) # may be this method could be docs_utilty.py
+    
+    response = create_document(docs_service, drive_service, parsed_response)
     if response == 'error':
         print(response)
     # create_document(service)
@@ -187,8 +216,8 @@ def test_api_request():
     # ACTION ITEM: In a production app, you likely want to save these
     #              credentials in a persistent database instead.
     session['credentials'] = credentials_to_dict(credentials)
-
-    return jsonify(response)
+    # may be the below can be replaced with a page, if need be
+    return f'<a href="{response}">Link to the created doc</a>'
 
 
 @app.route('/oauth2callback')
