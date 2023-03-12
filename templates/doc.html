@@ -1,0 +1,60 @@
+{% extends "base.html" %}
+
+{% block title %}
+    Set Parameters
+{% endblock %}
+{% block content %}
+<iframe id="pdf-document" download={{document['main_head']}}></iframe>
+<form action={{ url_for('test_api_request')}}>
+    <button class="btn btn-primary">Edit on Google docs</button>
+</form>
+<script>
+const doc = new jsPDF();
+
+const doc_data = {{document|safe}};
+// Define the font sizes and styles
+const mainHeadSize = 22;
+const subHeadSize = 16;
+const contentSize = 12;
+const bold = 'bold';
+
+
+// Set the font size and style for the main heading
+doc.setFontSize(mainHeadSize);
+doc.setFontStyle(bold);
+
+// Add the main heading to the pdf
+doc.text(doc_data.main_head, 10, 10);
+
+// Set the font size and style for the subheadings and content
+doc.setFontSize(subHeadSize);
+doc.setFontStyle(bold);
+doc.setFontSize(contentSize);
+doc.setFontStyle('normal');
+
+// Set the initial y-position for the content
+let y = 10;
+
+// Add the content to the pdf
+doc_data.head.forEach((head, index) => {
+  // Add the subheading
+  y += 10;
+  doc.text(head, 10, y);
+  y += 10;
+  // Add the content
+  doc.text(doc_data.content[index], 10, y, { maxWidth: 100 });
+  y += 20;
+});
+
+// Add the image to the left column
+//doc.addImage('https://dummyimage.com/200x200/000/fff', 'JPEG', 10, y, 50, 50);
+
+// Get the PDF data as a data URL
+const pdfDataUri = doc.output('datauristring');
+
+// Create an iframe element and set its source to the PDF data URL
+const iframe = document.getElementById('pdf-document');
+iframe.src = pdfDataUri;
+iframe.height = "700px";
+</script>
+{% endblock %}
