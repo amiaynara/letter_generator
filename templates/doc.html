@@ -38,8 +38,8 @@ let y = 20;
 // Add the content to the pdf
 doc_data.head.forEach((head, index) => {
   // Add the subheading
-  y += 10;
   doc.text(head, 10, y);
+  y += 10;
   // Add the content
   doc.text(doc_data.content[index], 10, y, { maxWidth: 100 });
   y += 30;
