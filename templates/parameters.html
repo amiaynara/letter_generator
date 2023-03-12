@@ -24,8 +24,8 @@
                                     <textarea rows="4" class="form-control" id="instruction" name="instruction" style="resize: none; overflow: hidden;"></textarea>
                                     <label for="instruction">Write anything</label>
                                 </div><br>
-                                <center><button id="submit-button" class="btn btn-success open-button open-button" type="submit">Submit</button></center>                                <!-- {% include 'my_button.html' %} -->
-                                <center><button id="submit-button" class="btn btn-success open-button open-button" formaction={{ url_for('test_api_request') }} type="submit">Brochure</button></center>                                <!-- {% include 'my_button.html' %} -->
+                                <center><button id="letter-submit-button" class="btn btn-success open-button open-button" type="submit">Submit</button></center>                                <!-- {% include 'my_button.html' %} -->
+                                <center><button id="doc-submit-button" class="btn btn-success open-button open-button" formaction={{ url_for('generate_doc') }} type="submit">Brochure</button></center>                                <!-- {% include 'my_button.html' %} -->
                             </form>
                             <div id="progress-container">
                                 <p id="action-text">Letter Generator at work...</p>
@@ -41,14 +41,15 @@
         </div>
     </div>
     <script>
-        const startButton = document.getElementById("submit-button");
+        const startButton = document.getElementById("letter-submit-button");
+        const docSubmitButton = document.getElementById('doc-submit-button');
         const progressBar = document.getElementById("progress-container");
         const bootstrapProgress = document.getElementById("bootstrapProgress");
         let currentValue = 0;
         let interval;
         const numberOfSeconds = 15;
         const times = 10 * numberOfSeconds;
-        startButton.addEventListener("click", () => {
+        const progress = () => {
             progressBar.style.display = "block";
             interval = setInterval(() => {
                 if (currentValue >= times) {
@@ -60,7 +61,9 @@
                     bootstrapProgress.setAttribute("aria-valuenow", currentValue);
                     currentValue++;
             }, 100);
-        });
+        }
+        startButton.addEventListener("click", progress);
+        docSubmitButton.addEventListener("click", progress);
     </script>
     <script>
     document.getElementById("instruction").addEventListener("input", function() {
