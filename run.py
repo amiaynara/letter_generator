@@ -175,6 +175,19 @@ def parse_response(response):
         parsed_response['content'].append(paragraph)
     return parsed_response
 
+
+@app.route('/generate_doc', methods=['GET', 'POST'])
+def generate_doc():
+    if request.method == 'POST':
+        # Remove the below line
+        sample_doc = {'main_head': 'iPhone 14 Pro: The Ultimate Smartphone', 'head': ['Revolution', 'Performance', 'Features'], 'content': [' The iPhone 14 Pro marks a major step forward in smartphone technology. With its cutting-edge A14 Bionic processor, 5G support, and advanced camera system, the Pro is a device that will appeal to power users and casual users alike. Its sleek design and powerful specs make it the perfect choice for anyone looking for a top-of-the-line device.', ' The A14 Bionic processor is the fastest chip ever in a smartphone, offering incredible speed and performance. Coupled with 5G support, the Pro is capable of downloading and streaming content faster than ever before. Its advanced camera system offers professional-grade photos and videos, and its long-lasting battery ensures that you can stay connected all day long.', ' The Pro also boasts an array of features, including a stunning OLED display, Face ID, and an all-new gesture control system. With its powerful processor, 5G support, and advanced camera system, the Pro is the perfect device for anyone looking for the ultimate in smartphone technology.']}
+        instruction = request.form['instruction']
+        chatGPT_response = generate_brochure(instruction)
+        parsed_response = parse_response(chatGPT_response) # may be this method could be docs_utilty.py
+        session['document'] = parsed_response
+        return render_template('doc.html', document=parsed_response)
+    return render_template('parameters.html')
+
 # This variable specifies the name of a file that contains the OAuth 2.0
 # information for this application, including its client_id and client_secret.
 CLIENT_SECRETS_FILE = "client_secret.json"
@@ -189,10 +202,8 @@ API_SERVICE_NAME = 'docs'
 API_VERSION = 'v1'
 DOCUMENT_ID = '18HKKU-xOVcSE-7r7kjigXXzYwiQd25hJN4pSvUbijzI'
 
-@app.route('/test', methods=['GET', 'POST'])
+@app.route('/test', methods=['GET'])
 def test_api_request():
-    if request.method == 'GET':
-        return render_template('parameters.html')
     if 'credentials' not in session:
         return redirect('authorize')
     
@@ -203,10 +214,10 @@ def test_api_request():
     docs_service = build(
         API_SERVICE_NAME, API_VERSION, credentials=credentials)
     drive_service = build('drive', 'v3', credentials=credentials)
-    instruction = request.form['instruction'] or 'Comparing iPhone 14 and Pixel 7'
-    chatGPT_response = generate_brochure(instruction)
-    parsed_response = parse_response(chatGPT_response) # may be this method could be docs_utilty.py
-    
+
+    parsed_response = session.get('document', None)
+    if not parsed_response:
+        return redirect(url_for('parameters'))
     response = create_document(docs_service, drive_service, parsed_response)
     if response == 'error':
         print(response)
