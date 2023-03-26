@@ -1,5 +1,7 @@
 from googleapiclient.errors import HttpError
-
+import os
+from googleapiclient.http import MediaFileUpload
+RETRY_COUNT = 3
 def get_doc_argument(parsed_response, type='resume'):
     '''Method to generate proper values for placeholders in the template google document'''
     google_doc_content = {
@@ -15,13 +17,16 @@ def get_placeholder(key, index=None):
     place_holder = '{{' + (f'{key}{index}' if index else key) + '}}'
     return place_holder
 
-def create_document(service, drive_service, parsed_response):
+def create_document(service, drive_service, parsed_response, has_image):
     # create a new, empty document
     # body = {
     #     'title': 'importance of doctors'
     # }
     # doc = service.documents().create(body=body).execute()
     # get content required to populate the document
+
+    requests = []
+    print('does it have has_image', has_image)
     try:
         google_doc_content = get_doc_argument(parsed_response)
         # create a new document based on the template
@@ -32,12 +37,29 @@ def create_document(service, drive_service, parsed_response):
         drive_response = drive_service.files().copy(fileId=template_id, body=body).execute()
         document_copy_id = drive_response.get('id')
 
-
+        if has_image:
+            # try to upload the image file to the drive
+            # Get the image file from the form data
+            print('file being sent to google drive is', has_image)
+            # Set the file metadata
+            # Create the media object for the file upload
+            filename = has_image.get('filename')
+            print('filename: ', filename)
+            file_metadata = {'name': f'doc_image_copy_{filename}'}
+            root = '/Users/amiaynarayan/Projects/innovateIQ/letter_generator/'
+            media = MediaFileUpload(os.path.join(root, 'static/images/', has_image.get('filename')), mimetype='image/jpeg')
+            file = drive_service.files().create(body=file_metadata, media_body=media, fields='id').execute()
+            # replace the existing image in the file with the new file
+            requests.append({
+                'replaceImage': {
+                    'imageObjectId': '1Y7zNOqqV4bxHAL6GJzlEDEbQ24_2T16z',   # template_image id templates/template_image.jpg
+                    'uri': f'https://drive.google.com/uc?id={file.get("id")}',
+                }
+            })
         #doc = service.documents().copy(body=body).execute()
         # Get the content of the template document
 
         # Replace the placeholders in the document
-        requests = []
         for key, value in google_doc_content.items():
             if isinstance(value, list):
                 for index, item in enumerate(value):
@@ -64,9 +86,13 @@ def create_document(service, drive_service, parsed_response):
 
         # Print the document ID and URL
         print('Created document with title: {0}'.format(body.get('name')))
-        return 'https://drive.google.com/open?id={0}'.format(document_copy_id)
+        return {'doc_link': 'https://drive.google.com/open?id={0}'.format(document_copy_id)}
     except Exception as error:
-        return f'ERROR: Something wrong occurred. \n{error}'
+        print(error)
+        if RETRY_COUNT <= 3:
+            print('trying without image ...')
+            create_document(service, drive_service, parsed_response, has_image=False) 
+        return {'error': f'ERROR: Something wrong occurred. \n{error}'}
 
 def get_document(service, document_id):
     try:
