@@ -44,6 +44,19 @@ doc_data.head.forEach((head, index) => {
   doc.text(doc_data.content[index], 10, y, { maxWidth: 100 });
   y += 40;
 });
+var imgBase64 = localStorage.getItem('image');
+if (imgBase64) {
+  let imgWidth = 80;
+  let imgHeight = 90;
+  var img = new Image();
+  img.onload = function() {
+    // The image has loaded, so we can now access its width property
+    ratio = imgWidth / img.width;
+    imgHeight = img.height * ratio;
+  };
+  img.src = "data:image/png;base64," + imgBase64;
+  doc.addImage(imgBase64, 'JPEG', 120, 20, imgWidth, imgHeight);
+}
 
 // Add the image to the left column
 //doc.addImage('https://dummyimage.com/200x200/000/fff', 'JPEG', 10, y, 50, 50);
