@@ -17,7 +17,7 @@ def get_placeholder(key, index=None):
     place_holder = '{{' + (f'{key}{index}' if index else key) + '}}'
     return place_holder
 
-def create_document(service, drive_service, parsed_response, has_image):
+def create_document(service, drive_service, parsed_response, has_image, retry=1):
     # create a new, empty document
     # body = {
     #     'title': 'importance of doctors'
@@ -93,7 +93,7 @@ def create_document(service, drive_service, parsed_response, has_image):
         if RETRY_COUNT <= 3:
             print('trying without image ...')
             retry += 1
-            create_document(service, drive_service, parsed_response, has_image=False) 
+            create_document(service, drive_service, parsed_response, has_image=False, retry=retry) 
         return {'error': f'ERROR: Something wrong occurred. \n{error}'}
 
 def get_document(service, document_id):
