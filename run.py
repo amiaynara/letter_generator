@@ -184,10 +184,12 @@ def generate_doc():
         sample_doc = {'main_head': 'iPhone 14 Pro: The Ultimate Smartphone', 'head': ['Revolution', 'Performance', 'Features'], 'content': [' The iPhone 14 Pro marks a major step forward in smartphone technology. With its cutting-edge A14 Bionic processor, 5G support, and advanced camera system, the Pro is a device that will appeal to power users and casual users alike. Its sleek design and powerful specs make it the perfect choice for anyone looking for a top-of-the-line device.', ' The A14 Bionic processor is the fastest chip ever in a smartphone, offering incredible speed and performance. Coupled with 5G support, the Pro is capable of downloading and streaming content faster than ever before. Its advanced camera system offers professional-grade photos and videos, and its long-lasting battery ensures that you can stay connected all day long.', ' The Pro also boasts an array of features, including a stunning OLED display, Face ID, and an all-new gesture control system. With its powerful processor, 5G support, and advanced camera system, the Pro is the perfect device for anyone looking for the ultimate in smartphone technology.']}
         instruction = request.form['instruction']
         image_file = request.files['image_file'] or None
-        session['image'] = bool(image_file) 
+        session['image'] = bool(image_file)
+        prod_root = '/home/coolexpert/letter_generator'
+        local_root = '/Users/amiaynarayan/Projects/innovateIQ/letter_generator/'
         if bool(image_file):
             session['image'] = {'filename': image_file.filename} 
-            image_file.save(f'static/images/{image_file.filename}')
+            image_file.save(os.path.join(prod_root, f'static/images/{image_file.filename}'))
         chatGPT_response = generate_brochure(instruction)
         parsed_response = parse_response(chatGPT_response) # may be this method could be docs_utilty.py
         session['document'] = parsed_response
