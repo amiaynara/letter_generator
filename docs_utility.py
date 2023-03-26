@@ -39,7 +39,7 @@ def create_document(service, drive_service, parsed_response, has_image, retry=1)
             file_metadata = {'name': f'doc_image_copy_{filename}'}
             local_root = '/Users/amiaynarayan/Projects/innovateIQ/letter_generator/'
             prod_root = '/home/coolexpert/letter_generator'
-            media = MediaFileUpload(os.path.join(local_root, 'static/images/', has_image.get('filename')), mimetype='image/jpeg')
+            media = MediaFileUpload(os.path.join(prod_root, 'static/images/', has_image.get('filename')), mimetype='image/jpeg')
             file = drive_service.files().create(body=file_metadata, media_body=media, fields='id').execute()
             # replace the existing image in the file with the new file
             requests.append({
