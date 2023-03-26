@@ -92,6 +92,7 @@ def create_document(service, drive_service, parsed_response, has_image):
         print(error)
         if RETRY_COUNT <= 3:
             print('trying without image ...')
+            retry += 1
             create_document(service, drive_service, parsed_response, has_image=False) 
         return {'error': f'ERROR: Something wrong occurred. \n{error}'}
 
