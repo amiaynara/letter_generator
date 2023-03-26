@@ -28,15 +28,6 @@ def create_document(service, drive_service, parsed_response, has_image, retry=1)
     requests = []
     print('does it have has_image', has_image)
     try:
-        google_doc_content = get_doc_argument(parsed_response)
-        # create a new document based on the template
-        template_id = '1zHdZWXJoTIw3_Flssomv0Lz_732Eq25O_lUMWDVy27k' #id for pet resume
-        # drive service to copy a file
-        copy_title = google_doc_content.get('main_head') or 'hot doc created using ai'
-        body = {'name': copy_title,}
-        drive_response = drive_service.files().copy(fileId=template_id, body=body).execute()
-        document_copy_id = drive_response.get('id')
-
         if has_image:
             # try to upload the image file to the drive
             # Get the image file from the form data
@@ -48,7 +39,7 @@ def create_document(service, drive_service, parsed_response, has_image, retry=1)
             file_metadata = {'name': f'doc_image_copy_{filename}'}
             local_root = '/Users/amiaynarayan/Projects/innovateIQ/letter_generator/'
             prod_root = '/home/coolexpert/letter_generator'
-            media = MediaFileUpload(os.path.join(prod_root, 'static/images/', has_image.get('filename')), mimetype='image/jpeg')
+            media = MediaFileUpload(os.path.join(local_root, 'static/images/', has_image.get('filename')), mimetype='image/jpeg')
             file = drive_service.files().create(body=file_metadata, media_body=media, fields='id').execute()
             # replace the existing image in the file with the new file
             requests.append({
@@ -57,6 +48,20 @@ def create_document(service, drive_service, parsed_response, has_image, retry=1)
                     'uri': f'https://drive.google.com/uc?id={file.get("id")}',
                 }
             })
+    except Exception as error:
+        print(error, retry)
+
+    try:
+        google_doc_content = get_doc_argument(parsed_response)
+        # create a new document based on the template
+        template_id = '1zHdZWXJoTIw3_Flssomv0Lz_732Eq25O_lUMWDVy27k' #id for pet resume
+        # drive service to copy a file
+        copy_title = google_doc_content.get('main_head') or 'hot doc created using ai'
+        body = {'name': copy_title,}
+        drive_response = drive_service.files().copy(fileId=template_id, body=body).execute()
+        document_copy_id = drive_response.get('id')
+
+
         #doc = service.documents().copy(body=body).execute()
         # Get the content of the template document
 
@@ -89,11 +94,10 @@ def create_document(service, drive_service, parsed_response, has_image, retry=1)
         print('Created document with title: {0}'.format(body.get('name')))
         return {'doc_link': 'https://drive.google.com/open?id={0}'.format(document_copy_id)}
     except Exception as error:
-        print(error)
+        retry += 1 
         if RETRY_COUNT <= 3:
-            print('trying without image ...')
-            retry += 1
-            create_document(service, drive_service, parsed_response, has_image=False, retry=retry) 
+            print('trying without image ...', retry)
+            return create_document(service, drive_service, parsed_response, has_image=False, retry=retry)
         return {'error': f'ERROR: Something wrong occurred. \n{error}'}
 
 def get_document(service, document_id):
