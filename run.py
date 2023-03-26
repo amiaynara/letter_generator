@@ -228,7 +228,7 @@ def test_api_request():
     has_image = session.get('image')
     response = create_document(docs_service, drive_service, parsed_response, has_image)
     if response.get('error'):
-        return render_template('400_bad_request.html') 
+        return render_template('400_bad_request.html', message=response.get('error')) 
 
     # Save credentials back to session in case access token was refreshed.
     # ACTION ITEM: In a production app, you likely want to save these
