@@ -1,0 +1,89 @@
+{% extends "base.html" %}
+
+{% block title %}
+    Set Parameters
+{% endblock %}
+{% block content %}
+    <div class="col-md-12 col-lg-6">
+        <div class="card">
+            <h5 class="card-header text-center">www.wrytenow.com</h5>
+            <div class="card-body">
+                <div class="container-md"><br>
+                    <!--<div class="row">
+                        <div class="col-12 col-md-12 examples">
+                            <p class="h4 text-muted">Examples</p>
+                            <ul class="list-group list-group-flush">
+                                <li class="list-group-item">Write Jennifer a romantic letter</li>
+                                <li class="list-group-item">Ask Joe to return your underwear in a funny tone</li>
+                                <li class="list-group-item">Write a speech at a wedding</li>
+                            </ul>-->
+                        </div>
+                        <div class="col-12 col-md-12">
+                            <form method="POST" action="{{ url_for('letter') }}" enctype="multipart/form-data">
+                                <div class="form-floating">
+                                    <textarea rows="4" class="form-control" id="instruction" name="instruction" style="resize: none; overflow: hidden;"></textarea>
+                                    <label for="instruction">Write anything</label>
+                                </div><br>
+                                <center><input class="btn btn-success open-button open-button" type="file" name="image_file" id="fileUpload"></center>
+                                <center><button id="doc-submit-button" class="btn btn-success open-button open-button" formaction={{ url_for('brochure') }} type="submit" onclick="previewImage()">Brochure</button></center>                                <!-- {% include 'my_button.html' %} -->
+                            </form>
+                            <div id="progress-container">
+                                <p id="action-text">Letter Generator at work...</p>
+                                <div id="bootstrapProgress" class="progress" role="progressbar" aria-valuenow="10" aria-valuemin="0" aria-valuemax="100">
+                                    <div class="progress-bar progress-bar-striped" style="width: 10%"></div>
+                                </div>
+                            </div>
+                            <div id="preview"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function previewImage() {
+            var file = document.getElementById('fileUpload').files[0];
+            console.log('the file will be saved');
+            var reader = new FileReader();
+            reader.onloadend = function() {
+                var imgBase64 = reader.result.replace(/^data:image\/(png|jpeg|jpg);base64,/, '');
+                document.getElementById('preview').innerHTML = '<img src="data:image/png;base64,' + imgBase64 + '">';
+                localStorage.setItem('image', imgBase64);
+            }
+            reader.readAsDataURL(file);
+        }
+    </script>
+    <script>
+        const startButton = document.getElementById("letter-submit-button");
+        const docSubmitButton = document.getElementById('doc-submit-button');
+        const progressBar = document.getElementById("progress-container");
+        const bootstrapProgress = document.getElementById("bootstrapProgress");
+        let currentValue = 0;
+        let interval;
+        const numberOfSeconds = 15;
+        const times = 10 * numberOfSeconds;
+        const progress = () => {
+            progressBar.style.display = "block";
+            interval = setInterval(() => {
+                if (currentValue >= times) {
+                        clearInterval(interval);
+                        bootstrapProgress.style.display = "none";
+                        document.getElementById("action-text").innerHTML = "Done! Hang tight. You will be redirected in a moment..."
+                    }
+                    bootstrapProgress.style.width = `${currentValue}%`;
+                    bootstrapProgress.setAttribute("aria-valuenow", currentValue);
+                    currentValue++;
+            }, 100);
+        }
+        startButton.addEventListener("click", progress);
+        docSubmitButton.addEventListener("click", progress);
+    </script>
+    <script>
+    document.getElementById("instruction").addEventListener("input", function() {
+        this.style.height = "auto";
+        this.style.height = (this.scrollHeight) + "px";
+    });
+    </script>
+{% endblock %}
+

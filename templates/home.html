@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+
+{% block title %}
+    Set Parameters
+{% endblock %}
+{% block content %}
+    <div class="col-md-12 col-lg-6">
+        <h1>Categories</h1>
+        <div class="row">
+          <div class="col-sm-6">
+            <div class="card">
+              <div class="card-header">
+                Letter
+              </div>
+              <div class="card-body">
+               <form action={{ url_for('letter')}}>
+                   <button type="submit">Create</button>
+               </form> 
+              </div>
+            </div>
+          </div>
+          <div class="col-sm-6">
+            <div class="card">
+              <div class="card-header">
+                Brochure
+              </div>
+              <div class="card-body">
+                <form action={{ url_for('brochure')}}>
+                   <button type="submit">Create</button>
+                </form> 
+                <!-- add content for Brochure category here -->
+              </div>
+            </div>
+          </div>
+        </div>
+    </div>
+{% endblock %}
