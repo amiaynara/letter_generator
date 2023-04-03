@@ -193,7 +193,7 @@ def brochure():
         local_root = '/Users/amiaynarayan/Projects/innovateIQ/letter_generator/'
         if bool(image_file):
             session['image'] = {'filename': image_file.filename} 
-            image_file.save(os.path.join(local_root, f'static/images/{image_file.filename}'))
+            image_file.save(os.path.join(prod_root, f'static/images/{image_file.filename}'))
         chatGPT_response = generate_brochure(instruction)
         parsed_response = parse_response(chatGPT_response) # may be this method could be docs_utilty.py
         session['document'] = parsed_response
@@ -251,7 +251,7 @@ def oauth2callback():
   state = session['state']
 
   flow = google_auth_oauthlib.flow.Flow.from_client_secrets_file(
-      LOCAL_CLIENT_SECRETS_FILE, scopes=SCOPES, state=state)
+      CLIENT_SECRETS_FILE, scopes=SCOPES, state=state)
   flow.redirect_uri = url_for('oauth2callback', _external=True)
 
   # Use the authorization server's response to fetch the OAuth 2.0 tokens.
@@ -271,7 +271,7 @@ def oauth2callback():
 def authorize():
   # Create flow instance to manage the OAuth 2.0 Authorization Grant Flow steps.
   flow = google_auth_oauthlib.flow.Flow.from_client_secrets_file(
-      LOCAL_CLIENT_SECRETS_FILE, scopes=SCOPES)
+      CLIENT_SECRETS_FILE, scopes=SCOPES)
 
   # The URI created here must exactly match one of the authorized redirect URIs
   # for the OAuth 2.0 client, which you configured in the API Console. If this
