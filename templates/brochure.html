@@ -19,14 +19,13 @@
                             </ul>-->
                         </div>
                         <div class="col-12 col-md-12">
-                            <form method="POST" action="{{ url_for('parameters') }}" enctype="multipart/form-data">
+                            <form method="POST" action="{{ url_for('letter') }}" enctype="multipart/form-data">
                                 <div class="form-floating">
                                     <textarea rows="4" class="form-control" id="instruction" name="instruction" style="resize: none; overflow: hidden;"></textarea>
                                     <label for="instruction">Write anything</label>
                                 </div><br>
-                                <center><button id="letter-submit-button" class="btn btn-success open-button open-button" type="submit">Submit</button></center>                                <!-- {% include 'my_button.html' %} -->
-                                <center><button id="doc-submit-button" class="btn btn-success open-button open-button" formaction={{ url_for('generate_doc') }} type="submit" onclick="previewImage()">Brochure</button></center>                                <!-- {% include 'my_button.html' %} -->
-                                <input type="file" name="image_file" id="fileUpload">
+                                <center><input class="btn btn-success open-button open-button" type="file" name="image_file" id="fileUpload"></center>
+                                <center><button id="doc-submit-button" class="btn btn-success open-button open-button" formaction={{ url_for('brochure') }} type="submit" onclick="previewImage()">Brochure</button></center>                                <!-- {% include 'my_button.html' %} -->
                             </form>
                             <div id="progress-container">
                                 <p id="action-text">Letter Generator at work...</p>

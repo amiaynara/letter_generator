@@ -5,7 +5,7 @@
 {% endblock %}
 {% block content %}
 <iframe id="pdf-document" download={{document['main_head']}}></iframe>
-<form action={{ url_for('test_api_request')}}>
+<form action={{ url_for('brochure')}}>
     <button class="btn btn-primary">Edit on Google docs</button>
 </form>
 <script>
